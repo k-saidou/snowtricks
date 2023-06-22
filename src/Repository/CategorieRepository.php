@@ -39,6 +39,24 @@ class CategorieRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @return Categories[]
+     */
+    public function findAll(): array
+    {
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = 'SELECT * FROM `categorie`';
+
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+
+        // returns an array of arrays (i.e. a raw data set)
+        return $resultSet->fetchAllAssociative();
+    }
+
+
 //    /**
 //     * @return Categorie[] Returns an array of Categorie objects
 //     */
