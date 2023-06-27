@@ -21,11 +21,12 @@
             </tr>
             <tr>
                 <th>Image</th>
-                <td>{{ trick.image }}</td>
+                <td><img src="{{ asset('uploads/brochures/' ~ trick.image) }}"
+                        alt="Grapefruit slice atop a pile of other slices"></td>
             </tr>
             <tr>
                 <th>Video</th>
-                <td>{{ trick.video }}</td>
+                <td><iframe src="{{ trick.video }}" width="400" heigth="400" frameborder="0" allowfullscreen=""></iframe></td>
             </tr>
         </tbody>
     </table>
