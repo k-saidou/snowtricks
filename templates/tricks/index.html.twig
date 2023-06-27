@@ -22,7 +22,8 @@
                 <td>{{ trick.id }}</td>
                 <td>{{ trick.nom }}</td>
                 <td>{{ trick.description }}</td>
-                <td>{{ trick.image }}</td>
+                <td><img src="{{ asset('uploads/brochures/' ~ trick.image) }}"
+                        alt="Grapefruit slice atop a pile of other slices"></td>
                 <td>{{ trick.video }}</td>
                 <td>
                     <a href="{{ path('app_tricks_show', {'id': trick.id}) }}">show</a>
