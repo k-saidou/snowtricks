@@ -3,11 +3,16 @@
 {% block title %}Edit User{% endblock %}
 
 {% block body %}
-    <h1>Edit User</h1>
+    <br>
+    <h1 class="text-center">Modifier le profil</h1>
+    <br>
+<div class="container">
+    {{ include('user/_form.html.twig', {'button_label': 'Modifier',
+        'button_class': 'btn btn-success'}) }}
 
-    {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
+    <a class="btn btn-outline-secondary" href="{{ path('app_user_index') }}">Retour à la liste</a>
 
-    <a href="{{ path('app_user_index') }}">back to list</a>
-
-    {{ include('user/_delete_form.html.twig') }}
+    <a{{ include('user/_delete_form.html.twig') }}</a>
+    <br><br>
+    </div>
 {% endblock %}

@@ -69,7 +69,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->tricks = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
     }
+/*
+    public function __toString()
+    {
+        return $this->commentaires;
+        return $this->tricks;
 
+    }
+*/
     public function getId(): ?int
     {
         return $this->id;

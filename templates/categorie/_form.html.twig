@@ -1,4 +1,10 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <div>
+        {{ form_row(form.libelle, {
+            'attr':{'class':'form-control'}
+        }) }}
+    </div>
+    <br>
+    <button class="btn btn-outline-success">{{ button_label|default('Enregistrer') }}</button>
+    <br><br>
 {{ form_end(form) }}
