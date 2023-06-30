@@ -3,9 +3,13 @@
 {% block title %}New Tricks{% endblock %}
 
 {% block body %}
-    <h1>Create new Tricks</h1>
+    <div class="container">
+        <br>
+        <h1 class="text-center">Créer un nouveau tricks</h1>
 
-    {{ include('tricks/_form.html.twig') }}
+        {{ include('tricks/_form.html.twig') }}
 
-    <a href="{{ path('app_tricks_index') }}">back to list</a>
+        <a class="btn btn-outline-secondary" href="{{ path('app_tricks_index') }}">Retour à la liste</a>
+    </div>
+    <br>
 {% endblock %}

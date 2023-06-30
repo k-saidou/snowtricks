@@ -26,8 +26,8 @@
                         alt="Grapefruit slice atop a pile of other slices"></td>
                 <td>{{ trick.video }}</td>
                 <td>
-                    <a href="{{ path('app_tricks_show', {'id': trick.id}) }}">show</a>
-                    <a href="{{ path('app_tricks_edit', {'id': trick.id}) }}">edit</a>
+                    <a class="btn btn-outline-primary" href="{{ path('app_tricks_show', {'id': trick.id}) }}">Voir</a>
+                    <a class="btn btn-outline-secondary" href="{{ path('app_tricks_edit', {'id': trick.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -38,5 +38,6 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_tricks_new') }}">Create new</a>
+    <a class="btn btn-outline-primary" href="{{ path('app_tricks_new') }}">Créer un tricks</a>
+    <br><br>
 {% endblock %}
