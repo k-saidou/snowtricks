@@ -22,6 +22,7 @@ class TricksType extends AbstractType
             ->add('description', TextareaType::class)
             ->add('image', FileType::class, [
                 'label' => 'image',
+                'multiple' => true,
 
                 // unmapped means that this field is not associated to any entity property
                 'mapped' => false,

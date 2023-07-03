@@ -1,0 +1,30 @@
+
+header.masthead {
+
+    min-height: 580px;
+    min-width: 1024px;
+    /* On indique un redimensionnement proportionnel */
+    width: 100%;
+    height: 100%;
+    /* L'image est positionnée en haut à gauche */
+    top: 0;
+    left: 0;
+
+    background-image: url('../image/home.jpg');
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-size: cover;
+}
+
+#modif{
+    color: red;
+}
+/*
+body{
+    background: url('../image/image.jpg');
+    top: 0;
+    left: 0;
+}
+*/
