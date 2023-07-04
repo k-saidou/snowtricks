@@ -6,24 +6,29 @@
     {% for flash_error in app.flashes('reset_password_error') %}
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
-    <div class="container">
-        <h1 class="text-center">Reset your password</h1>
-
-        {{ form_start(requestForm) }}
-        <div>
-            {{ form_row(requestForm.email, {
-                'attr':{'class':'form-control'}
-            }) }}
-        </div>
-            <div>
-                <small>
-                    Enter your email address and we will send you a
-                    link to reset your password.
-                </small>
+    <section class="request vh-100">
+        <div class="container py-5">
+            <div class="card text-center" style="width: 300 height: 300;">
+                <div class="card-header h5 text-white bg-secondary">Réinitialisation du mot de passe.</div>
+                    {{ form_start(requestForm) }}
+                    <div class="card-body px-5">
+                        <p class="card-text py-2">
+                            Entrer votre email et nous vous enverrons un email avec les instructions de réinitialisation.
+                        </p>
+                    <div class="form-outline">
+                        {{ form_row(requestForm.email, {
+                            'attr':{'class':'form-control-lg'}
+                        }) }}
+                    </div>
+                    <br>
+                    <button class="btn btn-secondary">Réinitialiser mot de passe</button>
+                    <div class="d-flex justify-content-between mt-4">
+                        <a class="" href="{{ path('app_login') }}">Connexion</a>
+                        <a class="" href="{{ path('app_register') }}">Inscription</a>
+                    </div>
+                </div>
+                {{ form_end(requestForm) }}
             </div>
-            <br>
-            <button class="btn btn-primary">Send password reset email</button>
-            <br><br>
-        {{ form_end(requestForm) }}
-    </div>
+        </div>
+    </section>
 {% endblock %}

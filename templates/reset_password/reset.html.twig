@@ -3,20 +3,22 @@
 {% block title %}Reset your password{% endblock %}
 
 {% block body %}
-<div class="container">
-    <br>
-    <h1>Reset your password</h1>
-
-    {{ form_start(resetForm) }}
-        <div>
-            {{ form_row(resetForm.plainPassword, {
-                'attr':{'class':'form-control'}
-            }) }}
+    <section class="request vh-100">
+        <div class="container py-5">
+            <div class="card text-center" style="width: 300 height: 300;">
+                <div class="card-header h5 text-white bg-secondary">Réinitialisation du mot de passe.</div>
+                    {{ form_start(resetForm) }}
+                    <br>
+                    <div class="form-outline">
+                        {{ form_row(resetForm.plainPassword, {
+                            'attr':{'class':'form-control'}
+                        }) }}
+                    </div>
+                    <br>
+                    <button class="btn btn-secondary">Réinitialiser le mot de passe</button>
+                <br><br>
+                {{ form_end(resetForm) }}
+            </div>
         </div>
-        <br>
-        <button class="btn btn-primary">Reset password</button>
-        <br>
-    {{ form_end(resetForm) }}
-    <br><br>
-</div>
+    </section>
 {% endblock %}
