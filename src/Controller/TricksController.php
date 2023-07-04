@@ -4,14 +4,17 @@ namespace App\Controller;
 
 use App\Entity\Tricks;
 use App\Form\TricksType;
+use App\Form\CommentaireType;
+use App\Entity\Commentaire;
 use App\Repository\TricksRepository;
+use App\Repository\CommentaireRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 /**
  * @Route("/tricks")
@@ -42,7 +45,7 @@ class TricksController extends AbstractController
 
             // this condition is needed because the 'brochure' field is not required
             // so the PDF file must be processed only when a file is uploaded
-            if ($image) {
+            foreach ($image as $image) {
                 $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
                 // this is needed to safely include the file name as part of the URL
                 $safeFilename = $slugger->slug($originalFilename);
@@ -76,8 +79,19 @@ class TricksController extends AbstractController
     /**
      * @Route("/{id}", name="app_tricks_show", methods={"GET"})
      */
-    public function show(Tricks $trick): Response
+    public function show(Request $request, Tricks $trick, CommentaireRepository $commentaireRepository): Response
     {
+        $commentaire = new Commentaire();
+        //      $commentaire->setIdTricks(16);
+          //    $commentaire->setIdUser(1);
+              $form = $this->createForm(CommentaireType::class, $commentaire);
+              $form->handleRequest($request);
+      
+              if ($form->isSubmitted() && $form->isValid()) {
+                  $commentaireRepository->add($commentaire, true);
+      
+                  return $this->redirectToRoute('app_commentaire_index', [], Response::HTTP_SEE_OTHER);
+              }
         return $this->render('tricks/show.html.twig', [
             'trick' => $trick,
         ]);
@@ -86,12 +100,36 @@ class TricksController extends AbstractController
     /**
      * @Route("/{id}/edit", name="app_tricks_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Tricks $trick, TricksRepository $tricksRepository): Response
+    public function edit(Request $request, Tricks $trick, TricksRepository $tricksRepository, SluggerInterface $slugger): Response
     {
         $form = $this->createForm(TricksType::class, $trick);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $image = $form->get('image')->getData();
+
+            // this condition is needed because the 'brochure' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            foreach ($image as $image) {
+                $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $image->move(
+                        $this->getParameter('brochures_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'imagename' property to store the PDF file name
+                // instead of its contents
+                $trick->setimage($newFilename);
+            }
             $tricksRepository->add($trick, true);
 
             return $this->redirectToRoute('app_tricks_index', [], Response::HTTP_SEE_OTHER);

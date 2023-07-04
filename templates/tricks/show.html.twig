@@ -3,38 +3,69 @@
 {% block title %}Tricks{% endblock %}
 
 {% block body %}
-    <h1>Tricks</h1>
+    <div class="container">
+        <br>
+        <h1 class="text-center">Tricks</h1>
+        <br><br>
+        <div class="card mb-3">
+            <img class="card-img-top" src="{{ asset('uploads/brochures/' ~ trick.image) }}"
+                width="350" heigth="350" alt="Card image cap">
+            <div class="card-img-overlay">
+                <h1 class="card-title text-center" id="titre">{{ trick.nom }}</h1>
+            </div>
+            <div class="card-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="card" style="width: 50; heigth: 50">
+                            <img src="{{ asset('uploads/brochures/' ~ trick.image) }}" class="card-img-top" alt="{{ trick.nom }}">
+                        </div>
+                        <br>
+                        <div class="card" style="width: 200; heigth: 200">
+                            <iframe src="{{ trick.video }}" class="card-img-top" frameborder="0" allowfullscreen=""></iframe>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+                <p class="card-text">{{ trick.description }}</p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                <div>
+                <a class="btn btn-outline-secondary "href="{{ path('app_tricks_index') }}">Retour à la liste</a>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ trick.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ trick.nom }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ trick.description }}</td>
-            </tr>
-            <tr>
-                <th>Image</th>
-                <td><img src="{{ asset('uploads/brochures/' ~ trick.image) }}"
-                        alt="Grapefruit slice atop a pile of other slices"></td>
-            </tr>
-            <tr>
-                <th>Video</th>
-                <td><iframe src="{{ trick.video }}" width="400" heigth="400" frameborder="0" allowfullscreen=""></iframe></td>
-            </tr>
-        </tbody>
-    </table>
+                <a class="btn btn-outline-primary" href="{{ path('app_tricks_edit', {'id': trick.id}) }}">Modifier</a>
 
-    <a class="btn btn-outline-secondary "href="{{ path('app_tricks_index') }}">Retour à la liste</a>
-
-    <a class="btn btn-outline-primary" href="{{ path('app_tricks_edit', {'id': trick.id}) }}">Modifier</a>
-
-    <a {{ include('tricks/_delete_form.html.twig') }}</a>
-    <br><br>
+                <a {{ include('tricks/_delete_form.html.twig') }}</a>
+                <br><br>
+                <hr>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1>{{ trick.commentaires | length }} Commentaires :</h1>
+                    </div>
+                    <div class="container"  id="card-container">
+                        {% for commentaire in trick.commentaires %}
+                        <div class="row">
+                            <div class="col-md-12" style="border:1px bg:red;">
+                                <h6>Ecrit par : le {{commentaire.id}}</h6>
+                                <p>{{commentaire.commentaire | raw}}</p>
+                            </div>
+                            <hr>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button id="load-more">Load more</button>
+                    <span>
+                        <span id="card-count"></span> 
+                        <span id="card-total"></span>      
+                    </span>
+                </div>
+                <hr>
+            </div>
+            <div class="container" style="border:1px solid black;">
+            {#   {{ include('commentaire/_form.html.twig') }} #}
+            </div>
+        </div>
+    </div>
 {% endblock %}
