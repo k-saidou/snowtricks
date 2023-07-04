@@ -7,38 +7,70 @@
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
 
-    <div class="container">
-        <br>
-        <h1 class="text-center">Inscription</h1>
-        {{ form_start(registrationForm) }}
-        <div>
-            {{ form_row(registrationForm.nom, {
-                'attr':{'class':'form-control'}
-            }) }}
+    <section class="">
+        <div class="px-4 py-5 px-md-5 text-center text-lg-start" style="background-color: hsl(0, 0%, 96%)">
+            <div class="container">
+                <div class="row gx-lg-5 align-items-center">
+                    <div class="col-lg-6 mb-5 mb-lg-0">
+                        <h1 class="my-5 display-3 fw-bold ls-tight">
+                            Bienvenue sur <br />
+                            <span class="text-primary">Snowtricks</span>
+                        </h1>
+                        <p style="color: hsl(217, 10%, 50.8%)">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                            Eveniet, itaque accusantium odio, soluta, corrupti aliquam
+                            quibusdam tempora at cupiditate quis eum maiores libero
+                            veritatis? Dicta facilis sint aliquid ipsum atque?
+                        </p>
+                    </div>
+                    <div class="col-lg-6 mb-5 mb-lg-0">
+                        <div class="card">
+                            <div class="card-body py-5 px-md-5">
+                                <form>
+                                    {{ form_start(registrationForm) }}
+                                    <!-- 2 column grid layout with text inputs for the first and last names -->
+                                    <div class="row">
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-outline">
+                                            {{ form_row(registrationForm.nom, {
+                                                'attr':{'class':'form-control'}
+                                            }) }}                        
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-outline">
+                                            {{ form_row(registrationForm.prenom, {
+                                                'attr':{'class':'form-control'}
+                                            }) }}
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <!-- Email input -->
+                                    <div class="form-outline mb-4">
+                                        {{ form_row(registrationForm.email, {
+                                            'attr':{'class':'form-control'}
+                                        }) }}
+                                    </div>
+                                    <!-- Password input -->
+                                    <div class="form-outline mb-4">
+                                        {{ form_row(registrationForm.plainPassword, {
+                                            label: 'Password',
+                                            'attr':{'class':'form-control'}
+                                        }) }}                    
+                                    </div>
+                                    <!-- Checkbox -->
+                                    <div class="form-check d-flex justify-content-center mb-4">
+                                        {{ form_row(registrationForm.agreeTerms) }}
+                                    </div>
+                                    <!-- Submit button -->
+                                    <button type="submit" class="btn btn-primary btn-block mb-4">Inscription</button>
+                                    {{ form_end(registrationForm) }}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div>
-            {{ form_row(registrationForm.prenom, {
-                'attr':{'class':'form-control'}
-            }) }}
-        </div>
-        <div>
-            {{ form_row(registrationForm.email, {
-                'attr':{'class':'form-control'}
-            }) }}
-        </div>
-        <div>
-            {{ form_row(registrationForm.plainPassword, {
-                label: 'Password',
-                'attr':{'class':'form-control'}
-            }) }}
-        </div>
-        <div>
-            {{ form_row(registrationForm.agreeTerms) }}
-        </div>
-        <div class="d-grid gap-2 col-6 mx-auto">
-            <button type="submit" class="btn btn-outline-success">Register</button>
-        </div>
-        <br>
-        {{ form_end(registrationForm) }}
-    </div>
+    </section>
 {% endblock %}
