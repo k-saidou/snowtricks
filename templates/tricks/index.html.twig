@@ -26,7 +26,7 @@
                     <td>{{ trick.description }}</td>
                     <td><img src="{{ asset('uploads/brochures/' ~ trick.image) }} "
                             width="100" heigth="100"
-                            alt="Grapefruit slice atop a pile of other slices"></td>
+                            alt="{{ trick.nom }}"></td>
                     <td>{{ trick.video }}</td>
                     <td>
                         <a class="btn btn-outline-primary" href="{{ path('app_tricks_show', {'id': trick.id}) }}">Voir</a>
