@@ -37,12 +37,9 @@ class TricksType extends AbstractType
                 // in the associated entity, so you can use the PHP constraint classes
                 'constraints' => [
                     new All([
-                        'constraints' => [
-
-                            new File([
-                            'maxSize' => '20M',
-                                ])
-                            ]
+                        new File([
+                        'maxSize' => '20M',
+                            ])
                         ])
                     ],
                 ])
