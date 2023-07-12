@@ -9,7 +9,7 @@
         <br><br>
         <div class="card mb-3">
             <img class="card-img-top" src="{{ asset('uploads/brochures/' ~ trick.image) }}"
-                width="350" heigth="350" alt="Card image cap">
+                max-width="350" max-heigth="350" alt="Card image cap">
             <div class="card-img-overlay">
                 <h1 class="card-title text-center" id="titre">{{ trick.nom }}</h1>
             </div>
@@ -44,28 +44,29 @@
                     </div>
                     <div class="container"  id="card-container">
                         {% for commentaire in trick.commentaires %}
-                        <div class="row">
-                            <div class="col-md-12" style="border:1px bg:red;">
-                                <h6>Ecrit par : le {{commentaire.id}}</h6>
-                                <p>{{commentaire.commentaire | raw}}</p>
+                            <div class="row">
+                                <div class="col-md-12" style="border:1px bg:red;">
+                                    <h6>Ecrit par : le {{commentaire.id}}</h6>
+                                    <p>{{commentaire.commentaire | raw}}</p>
+                                </div>
+                                <hr>
                             </div>
-                            <hr>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
                     </div>
-                </div>
-                <div class="card-actions">
-                    <button id="load-more">Load more</button>
-                    <span>
-                        <span id="card-count"></span> 
-                        <span id="card-total"></span>      
-                    </span>
                 </div>
                 <hr>
             </div>
-            <div class="container" style="border:1px solid black;">
-            {#   {{ include('commentaire/_form.html.twig') }} #}
-            </div>
         </div>
     </div>
+    {{ form_start(form) }}
+    <div>
+        {{ form_row(form.commentaire, {
+            'attr':{'class':'form-control'}
+        }) }}
+    </div>  
+    <br>
+    <button class="btn btn-outline-success">{{ button_label|default('Enregistrer') }}</button>
+    <br>
+    {{ form_end(form) }}
+
 {% endblock %}

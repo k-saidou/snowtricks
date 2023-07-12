@@ -54,9 +54,15 @@ class Tricks
      */
     private $commentaires;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Media::class, mappedBy="tricks", orphanRemoval=true)
+     */
+    private $media;
+
     public function __construct()
     {
         $this->commentaires = new ArrayCollection();
+        $this->media = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,6 +166,36 @@ class Tricks
             // set the owning side to null (unless already changed)
             if ($commentaire->getIdTricks() === $this) {
                 $commentaire->setIdTricks(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Media>
+     */
+    public function getMedia(): Collection
+    {
+        return $this->media;
+    }
+
+    public function addMedium(Media $medium): self
+    {
+        if (!$this->media->contains($medium)) {
+            $this->media[] = $medium;
+            $medium->setTricks($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMedium(Media $medium): self
+    {
+        if ($this->media->removeElement($medium)) {
+            // set the owning side to null (unless already changed)
+            if ($medium->getTricks() === $this) {
+                $medium->setTricks(null);
             }
         }
 

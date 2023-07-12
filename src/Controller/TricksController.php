@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Tricks;
 use App\Form\TricksType;
 use App\Entity\Commentaire;
+use App\Entity\User;
 use App\Form\CommentaireType;
 use App\Repository\TricksRepository;
 use App\Repository\CommentaireRepository;
@@ -84,23 +85,30 @@ class TricksController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_tricks_show", methods={"GET"})
+     * @Route("/{id}", name="app_tricks_show", methods={"GET", "POST"})
      */
     public function show(Request $request, Tricks $trick, CommentaireRepository $commentaireRepository): Response
     {
+
+        // id utilisateur //
+        $user = $this->getUser();
+
         $commentaire = new Commentaire();
-        //      $commentaire->setIdTricks(16);
-          //    $commentaire->setIdUser(1);
+        $commentaire->setDate(new \DateTime('now'));
+        $commentaire->setIdTricks($trick);
+        $commentaire->setIdUser($user);
               $form = $this->createForm(CommentaireType::class, $commentaire);
               $form->handleRequest($request);
       
               if ($form->isSubmitted() && $form->isValid()) {
                   $commentaireRepository->add($commentaire, true);
       
-                  return $this->redirectToRoute('app_commentaire_index', [], Response::HTTP_SEE_OTHER);
+                  return $this->redirectToRoute('app_tricks_show', ["id" =>$trick->getId()], Response::HTTP_SEE_OTHER);
               }
         return $this->render('tricks/show.html.twig', [
             'trick' => $trick,
+            'commentaire' => $commentaire,
+            'form' => $form->createView(),
         ]);
     }
 
