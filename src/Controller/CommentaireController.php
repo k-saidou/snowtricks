@@ -31,8 +31,9 @@ class CommentaireController extends AbstractController
     public function new(Request $request, CommentaireRepository $commentaireRepository): Response
     {
         $commentaire = new Commentaire();
+        $commentaire->setDate(new \DateTime('now'));
   //      $commentaire->setIdTricks(16);
-    //    $commentaire->setIdUser(1);
+        $commentaire->setIdUser($this->getUser());
         $form = $this->createForm(CommentaireType::class, $commentaire);
         $form->handleRequest($request);
 
