@@ -7,22 +7,31 @@
         <br>
         <h1 class="text-center">Tricks</h1>
         <br><br>
+                                        <div class="card-header">
+                                {# On ajoute un lien permettant de supprimer une image (sera géré en Ajax) #}
+                            <a href="{{ path('app_tricks_delete', {'id': trick.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ trick.id )}}"><img src="/image/sup1.ico"></a>
+                            <a href="{{ path('app_tricks_edit', {'id': trick.id}) }}"><img src="/image/update.ico"></a>
+                        </div>
+
         <div class="card mb-3">
-            <img class="card-img-top" src="{{ asset('uploads/brochures/' ~ trick.image) }}"
-                max-width="350" max-heigth="350" alt="Card image cap">
+            <img class="card-img-top" src="{{ asset('uploads/brochures/' ~ trick.imageUne) }}"
+                max-width="350" max-heigth="350" alt="Card image cap"> 
             <div class="card-img-overlay">
                 <h1 class="card-title text-center" id="titre">{{ trick.nom }}</h1>
             </div>
             <div class="card-body">
             <div class="container">
                 <div class="row">
-                    <div class="col-4">
-                        <div class="card" style="width: 100; heigth: 100">
-                            <img src="{{ asset('uploads/brochures/' ~ trick.image) }}" class="card-img-top" alt="{{ trick.nom }}">
-                        </div>
+                {% for media in trick.media %}
+                    <div class="col-3">
+                        <img src="{{ asset('/uploads/brochures/' ~media.image) }}" alt="" width="200">
+                    </div>
+                {% endfor %}
+                    <div class="col-lg-4">
                         <br>
                         <div class="card" style="width: 200; heigth: 200">
                             <iframe src="{{ trick.video }}" class="card-img-top" frameborder="0" allowfullscreen=""></iframe>
+                            <iframe src="{{ trick.video2 }}" class="card-img-top" frameborder="0" allowfullscreen=""></iframe>
                         </div>
                         <br>
                     </div>
@@ -30,21 +39,16 @@
                 <p class="card-text">{{ trick.description }}</p>
                 <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                 <div>
-                <a class="btn btn-outline-secondary "href="{{ path('app_tricks_index') }}">Retour à la liste</a>
-
-                <a class="btn btn-outline-primary" href="{{ path('app_tricks_edit', {'id': trick.id}) }}">Modifier</a>
-
-                <a {{ include('tricks/_delete_form.html.twig') }}</a>
                 <br><br>
                 <hr>
-                </div>
-                <div class="row">
+
+                    <div class="row">
                     <div class="col-md-12">
                         <h1>{{ trick.commentaires | length }} Commentaires :</h1>
                     </div>
-                    <div class="container"  id="card-container">
+                    <div class="box-container">
                         {% for commentaire in trick.commentaires %}
-                            <div class="row">
+                            <div class="box">
                                 <div class="col-md-12" style="border:1px bg:red;">
                                     <h6>Ecrit par : le {{commentaire.id}}</h6>
                                     <p>{{commentaire.commentaire | raw}}</p>
@@ -54,10 +58,15 @@
                         {% endfor %}
                     </div>
                 </div>
-                <hr>
+                </div>
             </div>
         </div>
     </div>
+    <div>
+    <a class="btn btn-outline-secondary" id="load-more">load more</a>
+</div>
+<br><br>
+<div class="container">
     {{ form_start(form) }}
     <div>
         {{ form_row(form.commentaire, {
@@ -68,5 +77,5 @@
     <button class="btn btn-outline-success">{{ button_label|default('Enregistrer') }}</button>
     <br>
     {{ form_end(form) }}
-
+</div>
 {% endblock %}

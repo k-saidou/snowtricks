@@ -10,6 +10,11 @@
         }) }}
     </div>
     <div>
+        {{ form_row(form.imageUne, {
+            'attr':{'class':'form-control'}
+        }) }}
+    </div>
+    <div>
         {{ form_row(form.image, {
             'attr':{'class':'form-control'}
         }) }}
@@ -19,6 +24,12 @@
             'attr':{'class':'form-control'}
         }) }}
     </div>
+    <div id="a_masquer" style="display:none">
+        {{ form_row(form.video2, {
+            'attr':{'class':'form-control'}
+        }) }}
+    </div>
+    <input type="button" value="+" onclick="masquer_div('a_masquer');" />
     <div>
         {{ form_row(form.categorie, {
             'attr':{'class':'form-control'}

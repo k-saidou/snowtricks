@@ -9,18 +9,18 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>NomImage</th>
+                <th>MediaImage</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for medium in media %}
+        {% for media in media %}
             <tr>
-                <td>{{ medium.id }}</td>
-                <td>{{ medium.nomImage }}</td>
+                <td>{{ media.id }}</td>
+                <td>{{ media.image }}</td>
                 <td>
-                    <a href="{{ path('app_media_show', {'id': medium.id}) }}">show</a>
-                    <a href="{{ path('app_media_edit', {'id': medium.id}) }}">edit</a>
+                    <a href="{{ path('app_media_show', {'id': media.id}) }}">show</a>
+                    <a href="{{ path('app_media_edit', {'id': media.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}

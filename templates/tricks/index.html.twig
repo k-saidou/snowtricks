@@ -13,7 +13,7 @@
                     <th>Id</th>
                     <th>Nom</th>
                     <th>Description</th>
-                    <th>Image</th>
+                    <th>ImageUne</th>
                     <th>Video</th>
                     <th>actions</th>
                 </tr>
@@ -24,9 +24,9 @@
                     <td>{{ trick.id }}</td>
                     <td>{{ trick.nom }}</td>
                     <td>{{ trick.description }}</td>
-                    <td><img src="{{ asset('uploads/brochures/' ~ trick.image) }} "
-                            width="100" heigth="100"
-                            alt="{{ trick.nom }}"></td>
+                    <td>{{ trick.imageUne }}
+                <img src="{{ asset('/uploads/brochures/' ~trick.imageUne) }}" alt="" width="150">
+                    </td>
                     <td>{{ trick.video }}</td>
                     <td>
                         <a class="btn btn-outline-primary" href="{{ path('app_tricks_show', {'id': trick.id}) }}">Voir</a>
