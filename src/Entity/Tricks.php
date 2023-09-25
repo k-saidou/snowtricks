@@ -6,9 +6,16 @@ use App\Repository\TricksRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TricksRepository::class)
+ * @UniqueEntity(
+ *      fields={"nom"},
+ *      errorPath="nom",
+ *      message="Il existe déja un Tricks portant ce nom."
+ * )
  */
 class Tricks
 {
@@ -28,11 +35,6 @@ class Tricks
      * @ORM\Column(type="string", length=255)
      */
     private $description;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $image;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -58,6 +60,16 @@ class Tricks
      * @ORM\OneToMany(targetEntity=Media::class, mappedBy="tricks", orphanRemoval=true)
      */
     private $media;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $imageUne;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $video2;
 
     public function __construct()
     {
@@ -90,18 +102,6 @@ class Tricks
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(?string $image): self
-    {
-        $this->image = $image;
 
         return $this;
     }
@@ -180,24 +180,48 @@ class Tricks
         return $this->media;
     }
 
-    public function addMedium(Media $medium): self
+    public function addMedia(Media $media): self
     {
-        if (!$this->media->contains($medium)) {
-            $this->media[] = $medium;
-            $medium->setTricks($this);
+        if (!$this->media->contains($media)) {
+            $this->media[] = $media;
+            $media->setTricks($this);
         }
 
         return $this;
     }
 
-    public function removeMedium(Media $medium): self
+    public function removeMedia(Media $media): self
     {
-        if ($this->media->removeElement($medium)) {
+        if ($this->media->removeElement($media)) {
             // set the owning side to null (unless already changed)
-            if ($medium->getTricks() === $this) {
-                $medium->setTricks(null);
+            if ($media->getTricks() === $this) {
+                $media->setTricks(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImageUne(): ?string
+    {
+        return $this->imageUne;
+    }
+
+    public function setImageUne(?string $imageUne): self
+    {
+        $this->imageUne = $imageUne;
+
+        return $this;
+    }
+
+    public function getVideo2(): ?string
+    {
+        return $this->video2;
+    }
+
+    public function setVideo2(?string $video2): self
+    {
+        $this->video2 = $video2;
 
         return $this;
     }

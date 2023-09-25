@@ -1,56 +1,62 @@
-const cardContainer = document.getElementById("card-container");
-const loadMoreButton = document.getElementById("load-more");
-const cardCountElem = document.getElementById("card-count");
-const cardTotalElem = document.getElementById("card-total");
-
-const cardLimit = 99;
-const cardIncrease = 3;
-const pageCount = Math.ceil(cardLimit / cardIncrease);
-let currentPage = 1;
-
-cardTotalElem.innerHTML = cardLimit;
-
-const getRandomColor = () => {
-  const h = Math.floor(Math.random() * 360);
-
-  return `hsl(${h}deg, 90%, 85%)`;
-};
-
-const handleButtonStatus = () => {
-  if (pageCount === currentPage) {
-    loadMoreButton.classList.add("disabled");
-    loadMoreButton.setAttribute("disabled", true);
+function masquer_div(a_masquer)
+{ console.log("step1");
+  if (document.getElementById(a_masquer).style.display == 'none')
+  {  console.log("step2");
+       document.getElementById(a_masquer).style.display = 'block';
   }
-};
-
-const createCard = (index) => {
-  const card = document.createElement("div");
-  card.className = "card";
-  card.innerHTML = index;
-  card.style.backgroundColor = getRandomColor();
-  cardContainer.appendChild(card);
-};
-
-const addCards = (pageIndex) => {
-  currentPage = pageIndex;
-
-  handleButtonStatus();
-
-  const startRange = (pageIndex - 1) * cardIncrease;
-  const endRange =
-    pageIndex * cardIncrease > cardLimit ? cardLimit : pageIndex * cardIncrease;
-  
-  cardCountElem.innerHTML = endRange;
-
-  for (let i = startRange + 1; i <= endRange; i++) {
-    createCard(i);
+  else
+  { console.log("step3");
+       document.getElementById(a_masquer).style.display = 'none';
   }
-};
+}
 
-window.onload = function () {
-  addCards(currentPage);
-  loadMoreButton.style.backgroundColor = getRandomColor();
-  loadMoreButton.addEventListener("click", () => {
-    addCards(currentPage + 1);
-  });
-};
+
+let loadMoreBtn = document.querySelector('#load-more');
+let currentItem = 3;
+
+loadMoreBtn.onclick = () =>{
+   let boxes = [...document.querySelectorAll('.container .box-container .box')];
+   for (var i = currentItem; i < currentItem + 3; i++){
+      boxes[i].style.display = 'inline-block';
+   }
+   currentItem += 3;
+
+   if(currentItem >= boxes.length){
+      loadMoreBtn.style.display = 'none';
+   }
+}
+
+window.onload = () => {
+   // Gestion des boutons "Supprimer"
+   let links = document.querySelectorAll("[data-delete]")
+   
+   // On boucle sur links
+   for(link of links){
+       // On écoute le clic
+       link.addEventListener("click", function(e){
+           // On empêche la navigation
+           e.preventDefault()
+
+           // On demande confirmation
+           if(confirm("Voulez-vous supprimer cette image ?")){
+               // On envoie une requête Ajax vers le href du lien avec la méthode DELETE
+               fetch(this.getAttribute("href"), {
+                   method: "DELETE",
+                   headers: {
+                       "X-Requested-With": "XMLHttpRequest",
+                       "Content-Type": "application/json"
+                   },
+                   body: JSON.stringify({"_token": this.dataset.token})
+               }).then(
+                   // On récupère la réponse en JSON
+                   response => response.json()
+               ).then(data => {
+                   if(data.success)
+                       this.parentElement.remove()
+                   else
+                       alert(data.error)
+               }).catch(e => alert(e))
+           }
+       })
+   }
+}

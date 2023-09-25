@@ -20,7 +20,7 @@ class Media
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $nomImage;
+    private $image;
 
     /**
      * @ORM\ManyToOne(targetEntity=Tricks::class, inversedBy="media")
@@ -33,14 +33,14 @@ class Media
         return $this->id;
     }
 
-    public function getNomImage(): ?string
+    public function getImage(): ?string
     {
-        return $this->nomImage;
+        return $this->image;
     }
 
-    public function setNomImage(?string $nomImage): self
+    public function setImage(?string $image): self
     {
-        $this->nomImage = $nomImage;
+        $this->image = $image;
 
         return $this;
     }

@@ -9,18 +9,18 @@
         <tbody>
             <tr>
                 <th>Id</th>
-                <td>{{ medium.id }}</td>
+                <td>{{ media.id }}</td>
             </tr>
             <tr>
                 <th>NomImage</th>
-                <td>{{ medium.nomImage }}</td>
+                <td>{{ media.mediaImage }}</td>
             </tr>
         </tbody>
     </table>
 
     <a href="{{ path('app_media_index') }}">back to list</a>
 
-    <a href="{{ path('app_media_edit', {'id': medium.id}) }}">edit</a>
+    <a href="{{ path('app_media_edit', {'id': media.id}) }}">edit</a>
 
     {{ include('media/_delete_form.html.twig') }}
 {% endblock %}
