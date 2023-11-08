@@ -41,6 +41,7 @@ class TricksController extends AbstractController
     public function new(Request $request, TricksRepository $tricksRepository, MediaRepository $mediaRepository, SluggerInterface $slugger): Response
     {
         $trick = new Tricks();
+        $trick->setAjouter(new \DateTime());
         $form = $this->createForm(TricksType::class, $trick);
         $form->handleRequest($request);
 
@@ -55,13 +56,10 @@ class TricksController extends AbstractController
 
                 try {
 
-                    $trick = new Tricks;
-                    $video->setTricks($trick);
-
                     // updates the 'imagename' property to store the PDF file name
                     // instead of its contents
                     $trick->setVideo($video);
-                    $tricksRepository->add($video, true);
+                    $tricksRepository->add($trick, true);
     
                 } catch (FileException $e) {
                     // ... handle exception if something happens during file upload
@@ -169,43 +167,40 @@ class TricksController extends AbstractController
      */
     public function edit(Request $request, Tricks $trick, TricksRepository $tricksRepository, MediaRepository $mediaRepository, SluggerInterface $slugger): Response
     {
+
+        $trick->setModifier(new \DateTime());
+
         $form = $this->createForm(TricksType::class, $trick);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $trick->setDescription($form->get('description')->getData());
+            $trick->setCategorie($form->get('categorie')->getData());
+
             $images = $form->get('image')->getData();
             $imageUne = $form->get('imageUne')->getData();
 
+
             if ($imageUne) {
-               
+
                 $originalFilename = pathinfo($imageUne->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename.'-'.uniqid().'.'.$imageUne->guessExtension();
 
-                // Move the file to the directory where brochures are stored
                 try {
                     $imageUne->move(
                         $this->getParameter('brochures_directory'),
                         $newFilename
                     );
-
-                    // updates the 'imagename' property to store the PDF file name
-                    // instead of its contents
     
                 } catch (FileException $e) {
                     // ... handle exception if something happens during file upload
                 }
-                // updates the 'imagename' property to store the PDF file name
-                // instead of its contents
                 $trick->setImageUne($newFilename);
-                $tricksRepository->add($trick, true);
 
-            
+            } 
 
-        }
-            // this condition is needed because the 'brochure' field is not required
-            // so the PDF file must be processed only when a file is uploaded
             if ($images) {
                 foreach ($images as $image)
                 {
@@ -235,10 +230,36 @@ class TricksController extends AbstractController
 
             }
 
+            $video = $form->get('video')->getData();
+        
+            if ($video) {
+
+                $trick->setVideo($video);
+            }
+
+            $video2 = $trick->getVideo2();
+            $newVideo2 = $form->get('video2')->getData();
+        
+            if ($newVideo2) {
+
+                try {
+
+                    $trick->setVideo2($video2);
+    
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+                
+            } elseif ($video2) {
+                $trick->setVideo2($video2);
+            }
+            $tricksRepository->add($trick, true);
+
             return $this->redirectToRoute('app_tricks_index', [], Response::HTTP_SEE_OTHER);
         }
+        
 
-        return $this->renderForm('tricks/new.html.twig', [
+        return $this->renderForm('tricks/edit.html.twig', [
             'trick' => $trick,
             'form' => $form,
         ]);
@@ -247,6 +268,19 @@ class TricksController extends AbstractController
     /**
      * @Route("/{id}/delete", name="app_tricks_delete", methods={"GET"})
      */
+
+      /*
+    public function delete(Request $request, Tricks $trick, TricksRepository $tricksRepository): JsonResponse
+{
+    if ($this->isCsrfTokenValid('delete'.$trick->getId(), $request->request->get('_token'))) {
+        $tricksRepository->remove($trick, true);
+
+        return new JsonResponse(['success' => true]);
+    }
+
+    return new JsonResponse(['success' => false, 'error' => 'Token CSRF invalide'], 400);
+}*/
+    
     public function delete(Request $request, Tricks $trick, TricksRepository $tricksRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$trick->getId(), $request->request->get('_token'))) {
@@ -254,5 +288,134 @@ class TricksController extends AbstractController
         }
 
         return $this->redirectToRoute('app_tricks_index', [], Response::HTTP_SEE_OTHER);
+    } 
+
+
+    /**
+     * @Route("/{id}/editVideo", name="app_tricks_editVideo", methods={"GET", "POST"})
+     */
+    public function editVideo(Request $request, Tricks $trick, TricksRepository $tricksRepository, MediaRepository $mediaRepository, SluggerInterface $slugger): Response
+    {
+        $trick->setModifier(new \DateTime());
+        var_dump($trick->getImageUne());
+        $form = $this->createForm(TricksType::class, $trick);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $video = $form->get('video')->getData();
+            $image1 = $trick->getImageUne();
+            if ($video)
+            {
+    
+                try {
+    
+                    // updates the 'imagename' property to store the PDF file name
+                    // instead of its contents
+                    $trick->setVideo($video);
+                    $trick->setImageUne($image1);
+
+                    $tricksRepository->add($trick, true);
+    
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+    
+            }
+    
+            return $this->redirectToRoute('app_tricks_index', [], Response::HTTP_SEE_OTHER);
+        }
+        return $this->renderForm('tricks/editVideo.html.twig', [
+            'trick' => $trick,
+            'form' => $form,
+        ]);
     }
+
+    /**
+     * @Route("/{id}/editVideo2", name="app_tricks_editVideo2", methods={"GET", "POST"})
+     */
+    public function editVideo2(Request $request, Tricks $trick, TricksRepository $tricksRepository, MediaRepository $mediaRepository, SluggerInterface $slugger): Response
+    {
+        $trick->setModifier(new \DateTime());
+
+        $form = $this->createForm(TricksType::class, $trick);
+        $form->handleRequest($request);
+        $imageUne = $form->get('imageUne')->getData();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $video2 = $form->get('video2')->getData();
+            $imageUne = $form->get('imageUne')->getData();
+            var_dump($imageUne);
+            $trick->setImageUne($imageUne);
+            if ($video2)
+            {
+
+                try {
+
+                    $trick->setVideo2($video2);
+                    $tricksRepository->add($trick, true);
+
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+            }
+
+        return $this->redirectToRoute('app_tricks_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+        return $this->renderForm('tricks/editVideo2.html.twig', [
+            'trick' => $trick,
+            'form' => $form,
+        ]);
+    }
+
+
+    /**
+     * @Route("/{id}/editImage", name="app_tricks_editImage", methods={"GET", "POST"})
+     */
+    public function editImage(Request $request, Tricks $trick, TricksRepository $tricksRepository, SluggerInterface $slugger): Response
+    {
+        $trick->setModifier(new \DateTime());
+
+        $form = $this->createForm(TricksType::class, $trick);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $imageUne = $form->get('imageUne')->getData();
+
+            if ($imageUne) {
+               
+                $originalFilename = pathinfo($imageUne->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$imageUne->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $imageUne->move(
+                        $this->getParameter('brochures_directory'),
+                        $newFilename
+                    );
+
+                    // updates the 'imagename' property to store the PDF file name
+                    // instead of its contents
+    
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+                // updates the 'imagename' property to store the PDF file name
+                // instead of its contents
+                $trick->setImageUne($newFilename);
+                $tricksRepository->add($trick, true);
+
+        }
+            return $this->redirectToRoute('app_tricks_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('tricks/editImage.html.twig', [
+            'trick' => $trick,
+            'form' => $form,
+        ]);
+    }
+
 }

@@ -28,15 +28,33 @@
                         <li class="nav-item"><a class="nav-link" href= "{{ path('app_user_index')}}">User</a></li>
                         <li class="nav-item"><a class="nav-link" href= "{{ path('app_tricks_index')}}">Tricks</a></li>
                         <li class="nav-item"><a class="nav-link" href= "{{ path('app_categorie_index')}}">Categorie</a></li>
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %} 
                         <li class="nav-item"><a class="nav-link" href= "{{ path('app_logout')}}">Déconnexion</a></li>
+                         {% else %}
                         <li class="nav-item"><a class="nav-link" href= "{{ path('app_login')}}">Connexion</a></li>
                         <li class="nav-item"><a class="nav-link" href= "{{ path('app_register')}}">Inscription</a></li>
+                         {% endif %}
                     </ul>
                 </div>
             </div>
         </nav>
 
         {% block body %}{% endblock %}
+        <div id="footer-mobile">
+        <div class="row justify-content-center">
+            <div class="col-3">
+                <a href="/"><img src="/image/page-daccueil.png"></a>
+            </div>
+            <div class="col-3">
+                <a href="/"><img src="/image/connexion.png"></a>
+            </div>
+            <div class="col-3">
+                <a href="/"><img src="/image/deconnexion.png"></a>
+            </div>
+        </div>
+                                         
+           
+        </div>
         <!-- Footer-->
         <footer class="py-5 bg-ligth">
             <div class="container px-5"><p class="m-0 text-center text-dark">Copyright &copy; Your Website 2023</p></div>

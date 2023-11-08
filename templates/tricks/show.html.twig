@@ -7,75 +7,121 @@
         <br>
         <h1 class="text-center">Tricks</h1>
         <br><br>
-                                        <div class="card-header">
-                                {# On ajoute un lien permettant de supprimer une image (sera géré en Ajax) #}
-                            <a href="{{ path('app_tricks_delete', {'id': trick.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ trick.id )}}"><img src="/image/sup1.ico"></a>
-                            <a href="{{ path('app_tricks_edit', {'id': trick.id}) }}"><img src="/image/update.ico"></a>
-                        </div>
-
         <div class="card mb-3">
-            <img class="card-img-top" src="{{ asset('uploads/brochures/' ~ trick.imageUne) }}"
-                max-width="350" max-heigth="350" alt="Card image cap"> 
+            {% if trick.imageUne is empty %}
+                {% if trick.media|length > 0 %}
+                    <img class="card-img-top" src="{{ asset('uploads/brochures/' ~ trick.media[0].image) }}" max-width="350" max-height="350" alt="Card image cap">
+                {% else %}
+                    <img class="card-img-top" src="{{ asset('uploads/brochures/default_image.jpg') }}" max-width="350" max-height="350" alt="Card image cap">
+                {% endif %}
+            {% else %}
+                <img class="card-img-top" src="{{ asset('uploads/brochures/' ~ trick.imageUne) }}" max-width="350" max-height="350" alt="Card image cap">
+            {% endif %}            
+            {% if is_granted('IS_AUTHENTICATED_ANONYMOUSLY') %} 
+            <div class="card-links">
+                <div class="link-box">
+                    <a id="edit-link" href="{{ path('app_tricks_edit', {'id': trick.id}) }}"><img src="/image/update.ico"></a>
+                    <a id="delete-link" href="{{ path('app_tricks_delete', {'id': trick.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ trick.id )}}"><img src="/image/sup1.ico"></a>
+                </div>
+            </div>
+            {% else %}
+            {% endif %}
             <div class="card-img-overlay">
                 <h1 class="card-title text-center" id="titre">{{ trick.nom }}</h1>
             </div>
-            <div class="card-body">
-            <div class="container">
-                <div class="row">
+        </div>
+        <div class="content">
+            <div class="row">
                 {% for media in trick.media %}
-                    <div class="col-3">
-                        <img src="{{ asset('/uploads/brochures/' ~media.image) }}" alt="" width="200">
-                    </div>
-                {% endfor %}
-                    <div class="col-lg-4">
-                        <br>
-                        <div class="card" style="width: 200; heigth: 200">
-                            <iframe src="{{ trick.video }}" class="card-img-top" frameborder="0" allowfullscreen=""></iframe>
-                            <iframe src="{{ trick.video2 }}" class="card-img-top" frameborder="0" allowfullscreen=""></iframe>
+                <div class="col-md">
+                    <div class="card">
+                        <img src="{{ asset('/uploads/brochures/' ~ media.image) }}" alt="" class="media-item card-img-top taille" >
+                        <div class="card-body">
+                            <a  id="add" href="{{ path('app_media_edit', {'id': media.id}) }}"><img src="/image/update.ico"></a>
+                            <a id="add" href="{{ path('app_tricks_delete', {'id': trick.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ trick.id )}}" align="right" no-repeat><img src="/image/sup1.ico"></a>
                         </div>
-                        <br>
                     </div>
                 </div>
-                <p class="card-text">{{ trick.description }}</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                <div>
-                <br><br>
-                <hr>
-
-                    <div class="row">
-                    <div class="col-md-12">
-                        <h1>{{ trick.commentaires | length }} Commentaires :</h1>
-                    </div>
-                    <div class="box-container">
-                        {% for commentaire in trick.commentaires %}
-                            <div class="box">
-                                <div class="col-md-12" style="border:1px bg:red;">
-                                    <h6>Ecrit par : le {{commentaire.id}}</h6>
-                                    <p>{{commentaire.commentaire | raw}}</p>
-                                </div>
-                                <hr>
+                {% endfor %}
+                <div class="col-md">
+                    <div class="card">
+                        <div class="card-body">
+                            <iframe src="{{ trick.video }}" class="video-item card-img-top" frameborder="0" allowfullscreen=""></iframe>
+                            <div class="card-body">
+                                <a  id="add" href="{{ path('app_tricks_editVideo', {'id': trick.id}) }}"><img src="/image/update.ico"></a>
+                                <a id="add" href="{{ path('app_tricks_delete', {'id': trick.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ trick.id )}}" align="right" no-repeat><img src="/image/sup1.ico"></a>
                             </div>
-                        {% endfor %}
+                        </div>
                     </div>
                 </div>
+                <div class="col-md">
+                    <div class="card">
+                        <div class="card-body">
+                            <iframe src="{{ trick.video2 }}" class="video-item card-img-top" frameborder="0" allowfullscreen=""></iframe>
+                            <div class="card-body">
+                                <a  id="add" href="{{ path('app_tricks_editVideo2', {'id': trick.id}) }}"><img src="/image/update.ico"></a>
+                                <a id="add" href="{{ path('app_tricks_delete', {'id': trick.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ trick.id )}}" align="right" no-repeat><img src="/image/sup1.ico"></a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        <button id="voir-plus" class="btn btn-outline-secondary">Voir plus</button>
+        <br><br>
+        <div>
+            <p class="card-text-center">{{ trick.description }}</p>
+        </div>
+        <br><br>
+        <div class="row justify-content-center">
+            <div class="col-3 mb-3">
+                <p class="card-text"><small class="text-muted">{{ trick.categorie }}</small></p>
+            </div>
+            <div class="col-3 mb-3">
+                <p class="card-text"><small class="text-muted">Créer le : {{ trick.ajouter ? trick.ajouter|date('d-m-y H:i:s') : ''}}</small></p>
+            </div>
+            <div class="col-3 mb-3">
+                <p class="card-text"><small class="text-muted">Modifier...</small></p>
+            </div>
+        </div>
+        <br>
+        <hr>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <h1>{{ trick.commentaires | length }} Commentaires :</h1>
+            </div>
+        </div>
+        <br>
+        {% for commentaire in trick.commentaires %}
+            <div class="row">
+                <div class="col-md-12 box" style="border: 1px solid #000;">
+                    <h6>Ecrit par : le {{commentaire.id}}</h6>
+                    <p>{{commentaire.commentaire | raw}}</p>
+                </div>
+            </div>
+            <hr>
+        {% endfor %}
+
+        <div class="container">
+            <a class="btn btn-outline-secondary" id="load-more">Load more</a>
+        </div>
+        <br>
+        <div class="container">
+            {{ form_start(form) }}
+            <div class="commentaire">
+                <h1>
+                    {{ form_row(form.commentaire, {
+                        'attr': {'class': 'form-control custom-border'},
+                        'label': 'Ajouter votre commentaire'
+                    }) }}
+                </h1>
+                <br>
+            </div>  
+            <br>
+            <button class="btn btn-outline-success">{{ button_label|default('Enregistrer') }}</button>
+            <br>
+            {{ form_end(form) }}
+        </div>
     </div>
-    <div>
-    <a class="btn btn-outline-secondary" id="load-more">load more</a>
-</div>
-<br><br>
-<div class="container">
-    {{ form_start(form) }}
-    <div>
-        {{ form_row(form.commentaire, {
-            'attr':{'class':'form-control'}
-        }) }}
-    </div>  
-    <br>
-    <button class="btn btn-outline-success">{{ button_label|default('Enregistrer') }}</button>
-    <br>
-    {{ form_end(form) }}
-</div>
 {% endblock %}

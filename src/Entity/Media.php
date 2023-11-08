@@ -28,6 +28,7 @@ class Media
      */
     private $tricks;
 
+
     public function getId(): ?int
     {
         return $this->id;

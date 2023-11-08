@@ -7,89 +7,65 @@
 <header class="masthead">
     <div class="container px-5">
         <div class="row gx-5 justify-content-center">
-            <div class="col-lg-6">
+            <div class="col-lg-8">
                 <div class="text-center my-5">
-                    <h1 class="display-5 fw-bolder text-white mb-2">Present your business in a whole new way</h1>
-                    <p class="lead text-white-50 mb-4">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit!</p>
-                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-                        <a class="btn btn-primary btn-lg px-4 me-sm-3" href="#features">Get Started</a>
-                        <a class="btn btn-outline-light btn-lg px-4" href="#!">Learn More</a>
-                    </div>
+                    <h1 class="display-4 fw-bolder text-white mb-2">SNOWTRICKS</h1>
+                    <p class="lead display-6 fw-bolder mb-4">Découvre et partage tes tricks.</p>
                 </div>
             </div>
         </div>
     </div>
+    <div style="position: relative;">
+        <button class="btn btn-lg btn-primary"  onclick="scrollToBottom()" style="position: absolute; bottom: 0; right: 0;">
+            <i class="bi bi-arrow-down custom-icon"></i>
+        </button>
+    </div>
 </header>
+
 {% for message in app.flashes('success') %}
     <div class="alert alert-success" role="alert">{{ message }}</div>
 {% endfor %}
-<!-- Features section-->
 
+<!-- Features section-->
 <section class="py-5 border-bottom" id="features" data-tricks="">
     <div class="container">
         <div class="row">
             <div class="card">
-                <h1 class="heading mb-3">Catégorie des tricks</h1>
+                <h1 class="heading mb-3">Tous les tricks <i class="bi bi-arrow-down"></i></h1>
                 <div class="box-container mb-3">
-                {% for categorie in categorie %}
-                    <div class="box">
-                        <div class="card-header">
-                                {# On ajoute un lien permettant de supprimer une image (sera géré en Ajax) #}
-                            <a href="{{ path('app_categorie_delete', {'id': categorie.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ categorie.id )}}"><img src="/image/sup1.ico"></a>
-                            <a href="{{ path('app_categorie_edit', {'id': categorie.id}) }}"><img src="/image/update.ico"></a>
+                    {% for trick in trick %}
+                    <div class="box col-lg-3">
+
+                        <div class="card-header">  
+                            <img class="card-img-top" src="{{ asset('uploads/brochures/' ~ trick.imageUne) }}" alt="Card image cap"> 
                         </div>
                         <div class="card-container">
-                            <h3>{{ categorie.libelle }}</h3>
-                            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod, adipisci!</p>
-                            <a class="text-decoration-none" href="{{ path('app_tricks_index') }}">
-                                Voir les tricks
+                            <h3>{{ trick.nom }}
+                                <a href="{{ path('app_tricks_edit', {'id': trick.id}) }}"><img src="/image/update.ico"></a>
+                                <a href="{{ path('app_tricks_delete', {'id': trick.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ trick.id )}}">
+                                    <img src="/image/sup1.ico">
+                                </a>
+                            </h3>
+                            <a class="text-decoration-none" href="{{ path('app_tricks_show', {'id': trick.id}) }}">
+                                Voir plus
                                 <i class="bi bi-arrow-right"></i>
                             </a>
                         </div>
                     </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>     
+                <div class="d-grid gap-2 col-6 mx-auto">
+                    <a id="load-more" class="btn btn-outline-success">load more</a>
                 </div>
             </div>
         </div>
-        <a class="btn btn-outline-secondary" id="load-more">load more</a>
     </div>
+    <div style="position: relative;">
+        <button class="btn btn-lg btn-primary"  onclick="scrollToTop()" style="position: absolute; bottom: 0; right: 0;">
+            <i class="bi bi-arrow-up custom-icon"></i>
+        </button>
+    </div>
+
 </section>
 
-<!-- Testimonials section-->
-<section class="py-5 border-bottom">
-    <div class="container px-5 my-5 px-5">
-        <div class="text-center mb-5">
-            <h2 class="fw-bolder">Customer testimonials</h2>
-            <p class="lead mb-0">Our customers love working with us</p>
-        </div>
-        <div class="row gx-5 justify-content-center">
-            <div class="col-lg-6">
-                <!-- Testimonial 1-->
-                <div class="card mb-4">
-                    <div class="card-body p-4">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0"><i class="bi bi-chat-right-quote-fill text-primary fs-1"></i></div>
-                            <div class="ms-4">
-                                <p class="mb-1">Thank you for putting together such a great product. We loved working with you and the whole team, and we will be recommending you to others!</p>
-                                <div class="small text-muted">- Client Name, Location</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Testimonial 2-->
-                <div class="card">
-                    <div class="card-body p-4">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0"><i class="bi bi-chat-right-quote-fill text-primary fs-1"></i></div>
-                            <div class="ms-4">
-                                <p class="mb-1">The whole team was a huge help with putting things together for our company and brand. We will be hiring them again in the near future for additional work!</p>
-                                <div class="small text-muted">- Client Name, Location</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 {% endblock %}
