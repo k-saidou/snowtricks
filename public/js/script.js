@@ -12,7 +12,7 @@ function masquer_div(a_masquer)
 
 
 let loadMoreBtn = document.querySelector('#load-more');
-let currentItem = 3;
+let currentItem = 6;
 
 loadMoreBtn.onclick = () =>{
    let boxes = [...document.querySelectorAll('.container .box-container .box')];
@@ -24,32 +24,26 @@ loadMoreBtn.onclick = () =>{
    if(currentItem >= boxes.length){
       loadMoreBtn.style.display = 'none';
    }
-}
-
+} 
+/*
 window.onload = () => {
-   // Gestion des boutons "Supprimer"
    let links = document.querySelectorAll("[data-delete]")
    
-   // On boucle sur links
    for(link of links){
-       // On écoute le clic
        link.addEventListener("click", function(e){
-           // On empêche la navigation
            e.preventDefault()
+console.log(this.getAttribute("data-token"))
 
-           // On demande confirmation
            if(confirm("Voulez-vous supprimer cette image ?")){
-               // On envoie une requête Ajax vers le href du lien avec la méthode DELETE
                fetch(this.getAttribute("href"), {
-                   method: "DELETE",
-                   headers: {
-                       "X-Requested-With": "XMLHttpRequest",
-                       "Content-Type": "application/json"
-                   },
-                   body: JSON.stringify({"_token": this.dataset.token})
-               }).then(
-                   // On récupère la réponse en JSON
-                   response => response.json()
+                method: "POST",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "Content-Type": "application/json",
+                    "X-CSRF-Token": this.getAttribute("data-token") 
+                },
+            }).then(                   
+                  response => response.json()
                ).then(data => {
                    if(data.success)
                        this.parentElement.remove()
@@ -59,4 +53,49 @@ window.onload = () => {
            }
        })
    }
+}
+*/
+  // Fonction pour faire défiler la page vers le haut
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Fonction pour faire défiler la page vers le bas
+  function scrollToBottom() {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  }
+
+  // Afficher ou masquer le bouton "Haut de page" en fonction de la position de défilement
+  window.onscroll = function() {
+    var scrollToTopButton = document.getElementById("scrollToTopButton");
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      scrollToTopButton.style.display = "block";
+    } else {
+      scrollToTopButton.style.display = "none";
+    }
+  };
+
+  // script.js
+document.addEventListener("DOMContentLoaded", function() {
+  const voirPlusButton = document.getElementById("voir-plus");
+  const content = document.querySelector(".content");
+
+  voirPlusButton.addEventListener("click", function() {
+      if (content.style.display === "none" || content.style.display === "") {
+          content.style.display = "block";
+          voirPlusButton.textContent = "Voir moins";
+      } else {
+          content.style.display = "none";
+          voirPlusButton.textContent = "Voir plus";
+      }
+  });
+});
+
+function openModal() {
+  $('#myModal').modal('show'); // Utilisez l'ID de votre fenêtre modale
+}
+
+// Fonction pour fermer la fenêtre modale
+function closeModal() {
+  $('#myModal').modal('hide'); // Utilisez l'ID de votre fenêtre modale
 }

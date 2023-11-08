@@ -19,7 +19,7 @@ class MediaType extends AbstractType
                 'mapped' => false,
                 'required' => false
             ])
-            ->add('tricks')
+        //    ->add('tricks')
         ;
     }
 

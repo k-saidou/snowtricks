@@ -98,7 +98,8 @@ class MediaController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $image = $form->get('image')->getData();
+            $image = $form->get('mediaImage')->getData();
+           // $username = $form["user"]["username"]->getData();
 
             // this condition is needed because the 'brochure' field is not required
             // so the PDF file must be processed only when a file is uploaded
@@ -134,13 +135,13 @@ class MediaController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_media_delete", methods={"POST"})
+     * @Route("/{id}/delete", name="app_media_delete", methods={"GET"})
      */
     public function delete(Request $request, Media $media, MediaRepository $mediaRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$media->getId(), $request->request->get('_token'))) {
+    //    if ($this->isCsrfTokenValid('delete'.$media->getId(), $request->request->get('_token'))) {
             $mediaRepository->remove($media, true);
-        }
+    //    }
 
         return $this->redirectToRoute('app_media_index', [], Response::HTTP_SEE_OTHER);
     }

@@ -6,6 +6,8 @@ use App\Entity\Categorie;
 use App\Entity\Tricks;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -21,7 +23,7 @@ class TricksType extends AbstractType
         $builder
             ->add('nom', TextType::class)
             ->add('description', TextareaType::class)
-            ->add('imageUne', FileType::class, [
+            ->add('imageUne', FileType::class, ['data_class' => null, 
                 'label' => 'Image à la une',
 
                 // make it optional so you don't have to re-upload the PDF file
@@ -55,10 +57,12 @@ class TricksType extends AbstractType
                         ])
                     ],
                 ])
-                ->add('video', TextareaType::class)
-                ->add('video2', TextareaType::class)
+                ->add('video', TextareaType::class, array('data_class' => null))
+                ->add('video2', TextareaType::class, array('data_class' => null))
                 ->add('categorie', EntityType::class, [
-                'class' => Categorie::class])          
+                'class' => Categorie::class])
+                ->add('ajouter', DateTimeType::class, array('data_class' => null))
+                ->add('modifier', DateTimeType::class, array('data_class' => null))
         ;
     }
 

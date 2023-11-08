@@ -71,6 +71,16 @@ class Tricks
      */
     private $video2;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $ajouter;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $modifier;
+
     public function __construct()
     {
         $this->commentaires = new ArrayCollection();
@@ -202,6 +212,8 @@ class Tricks
         return $this;
     }
 
+
+
     public function getImageUne(): ?string
     {
         return $this->imageUne;
@@ -222,6 +234,30 @@ class Tricks
     public function setVideo2(?string $video2): self
     {
         $this->video2 = $video2;
+
+        return $this;
+    }
+
+    public function getAjouter(): ?\DateTimeInterface
+    {
+        return $this->ajouter;
+    }
+
+    public function setAjouter(?\DateTimeInterface $ajouter): self
+    {
+        $this->ajouter = $ajouter;
+
+        return $this;
+    }
+
+    public function getModifier(): ?\DateTimeInterface
+    {
+        return $this->modifier;
+    }
+
+    public function setModifier(?\DateTimeInterface $modifier): self
+    {
+        $this->modifier = $modifier;
 
         return $this;
     }

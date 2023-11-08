@@ -1,19 +1,97 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Tricks{% endblock %}
+{% block title %}Tricks{% endblock %}
 
 {% block body %}
+<form method="POST" action="{{ path('app_tricks_edit', {'id': trick.id}) }}">
+
     <div class="container">
         <br>
-        <h1 class="text-center">Modifier un Tricks</h1>
-
-        {{ include('tricks/_form.html.twig', {'button_label': 'Modifier',
-        'button_class': 'btn btn-success'}) }}
-
-        <a class="btn btn-secondary" href="{{ path('app_tricks_index') }}">Retour</a>
+        <h1 class="text-center">Tricks</h1>
+        <br><br>
+        <div class="card mb-3">
+            <img class="card-img-top" src="{{ asset('uploads/brochures/' ~ trick.imageUne) }}"
+                max-width="350" max-heigth="350" alt="Card image cap"> 
+            <div class="card-links">
+                <div class="link-box">
+                    <a id="edit-link" href="{{ path('app_tricks_editImage', {'id': trick.id}) }}"><img src="/image/update.ico"></a>
+                    <a id="delete-link" href="{{ path('app_tricks_delete', {'id': trick.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ trick.id )}}"><img src="/image/sup1.ico"></a>
+                </div>
+            </div>
+            <div class="card-img-overlay">
+                <h1 class="card-title text-center" id="titre">
+                {{ form_row(form.nom, {
+                'attr':{'class':'form-control'}
+            }) }}
+                
+                </h1>
+            </div>
+        </div>
+        <div class="content">
+            <div class="row">
+                {% for media in trick.media %}
+                <div class="col-md">
+                    <div class="card">
+                        <img src="{{ asset('/uploads/brochures/' ~ media.image) }}" alt="" class="media-item card-img-top">
+                        <div class="card-body">
+                            <a  id="add" href="{{ path('app_media_edit', {'id': media.id}) }}"><img src="/image/update.ico"></a>
+                            <a id="add" href="{{ path('app_media_delete', {'id': media.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ media.id )}}" align="right" no-repeat><img src="/image/sup1.ico"></a>
+                            <a href="{{ path('app_media_edit', {'id': media.id}) }}">edit</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="col-md">
+                    <div class="card">
+                        <div class="card-body">
+                            <iframe src="{{ trick.video }}" class="video-item card-img-top" frameborder="0" allowfullscreen=""></iframe>
+                            <div class="card-body">
+                                <a  id="add" href="{{ path('app_tricks_editVideo', {'id': trick.id}) }}"><img src="/image/update.ico"></a>
+                                <a id="add" href="{{ path('app_tricks_delete', {'id': trick.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ trick.id )}}" align="right" no-repeat><img src="/image/sup1.ico"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="card">
+                        <div class="card-body">
+                            <iframe src="{{ trick.video2 }}" class="video-item card-img-top" frameborder="0" allowfullscreen=""></iframe>
+                            <div class="card-body">
+                                <a  id="add" href="{{ path('app_tricks_editVideo2', {'id': trick.id}) }}"><img src="/image/update.ico"></a>
+                                <a id="add" href="{{ path('app_tricks_delete', {'id': trick.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ trick.id )}}" align="right" no-repeat><img src="/image/sup1.ico"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button id="voir-plus" class="btn btn-outline-secondary">Voir plus</button>
+        <br><br> 
+        <div>
+            <p class="card-text"><small class="text-muted">{{ form_row(form.description, {
+                'attr':{'class':'form-control'}
+            }) }}</small></p>
+        </div>
         <br>
+        <div class="row">
+            <div class="col-sm-3 mb-3">
+                <p class="card-text"><small class="text-muted">{{ form_row(form.categorie, {
+                    'attr':{'class':'form-control'}
+                }) }}</small></p>
+            </div>
+        </div> 
+        <div class="row justify-content-center">         
+            <div class="col-sm-1 mb-3">
+                {{ include('tricks/_delete_form.html.twig') }}
+            </div>
+                <a href="{{ path('app_tricks_delete', {'id': trick.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ trick.id )}}">
+                    <img src="/image/sup1.ico">
+                </a>
+            <div class="col-sm-1 mb-3">
+                <button class="btn btn-outline-success" type="submit" href="{{ path('app_tricks_edit', {'id': trick.id}) }}">{{ button_label|default('Enregistrer') }}</button>
+            </div>
+        </div>
         <br>
-        <a>{{ include('tricks/_delete_form.html.twig') }}</a>
     </div>
-    <br>
+    </form>
 {% endblock %}
