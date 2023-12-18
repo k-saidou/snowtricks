@@ -10,17 +10,12 @@
         }) }}
     </div>
     <div>
-        {{ form_row(form.imageUne, {
-            'attr':{'class':'form-control'}
-        }) }}
-    </div>
-    <div>
         {{ form_row(form.image, {
             'attr':{'class':'form-control'}
         }) }}
     </div>
     <div>
-        {{ form_row(form.video, {
+        {{ form_row(form.video1, {
             'attr':{'class':'form-control'}
         }) }}
     </div>
@@ -29,19 +24,7 @@
             'attr':{'class':'form-control'}
         }) }}
     </div>
-        <input type="button" value="+" onclick="masquer_div('a_masquer');" />
-
-        <div>
-        {{ form_row(form.ajouter, {
-            'attr':{'class':'form-control'}
-        }) }}
-    </div>
-    <div>
-        {{ form_row(form.modifier, {
-            'attr':{'class':'form-control'}
-        }) }}
-    </div>
-
+    <input type="button" value="+" onclick="masquer_div('a_masquer');" />
     <div>
         {{ form_row(form.categorie, {
             'attr':{'class':'form-control'}

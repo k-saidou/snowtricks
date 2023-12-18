@@ -23,20 +23,6 @@ class TricksType extends AbstractType
         $builder
             ->add('nom', TextType::class)
             ->add('description', TextareaType::class)
-            ->add('imageUne', FileType::class, ['data_class' => null, 
-                'label' => 'Image à la une',
-
-                // make it optional so you don't have to re-upload the PDF file
-                // every time you edit the Product details
-                'required' => false,
-                // unmapped fields can't define their validation using annotations
-                // in the associated entity, so you can use the PHP constraint classes
-                'constraints' => [
-                        new File([
-                        'maxSize' => '20M',
-                            ])
-                    ],
-                ])
             ->add('image', FileType::class, [
                 'label' => 'Images',
 
@@ -57,12 +43,17 @@ class TricksType extends AbstractType
                         ])
                     ],
                 ])
-                ->add('video', TextareaType::class, array('data_class' => null))
-                ->add('video2', TextareaType::class, array('data_class' => null))
-                ->add('categorie', EntityType::class, [
+            ->add('video1', TextareaType::class, array('data_class' => null,
+                'mapped' => false,
+                'required' => false,
+                ))
+            ->add('video2', TextareaType::class, array('data_class' => null,
+                'mapped' => false,
+                'required' => false,
+
+                ))
+            ->add('categorie', EntityType::class, [
                 'class' => Categorie::class])
-                ->add('ajouter', DateTimeType::class, array('data_class' => null))
-                ->add('modifier', DateTimeType::class, array('data_class' => null))
         ;
     }
 

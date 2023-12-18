@@ -1,4 +1,4 @@
-<form method="get" action="{{ path('app_tricks_delete', {'id': trick.id}) }}" onsubmit="return confirm('Voulez-vous supprimer cette image ?');">
+<form method="post" action="{{ path('app_tricks_delete', {'id': trick.id}) }}" onsubmit="return confirm('Voulez-vous supprimer ce trick ?');">
     <input type="hidden" name="_token" value="{{ ('delete' ~ trick.id) }}">
-    <button class="btn btn-danger" type="submit">Supprimer</button>
+    <button class="btn" type="submit"><img src="/image/sup1.ico"></button>
 </form>

@@ -23,11 +23,10 @@ class Media
     private $image;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Tricks::class, inversedBy="media")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Tricks", inversedBy="media", cascade={"persist"})
+     * @ORM\JoinColumn(name="tricks_id", referencedColumnName="id")
      */
     private $tricks;
-
 
     public function getId(): ?int
     {
