@@ -25,6 +25,8 @@ loadMoreBtn.onclick = () =>{
       loadMoreBtn.style.display = 'none';
    }
 } 
+
+
 /*
 window.onload = () => {
    let links = document.querySelectorAll("[data-delete]")
@@ -55,6 +57,52 @@ console.log(this.getAttribute("data-token"))
    }
 }
 */
+// window.onload = () => {
+//   let links = document.querySelectorAll("[data-delete]");
+
+//   for (link of links) {
+//       link.addEventListener("click", function (e) {
+//           e.preventDefault();
+//           console.log(this.getAttribute("data-token"));
+
+//           if (confirm("Voulez-vous supprimer cette image ?")) {
+//               fetch(this.getAttribute("href"), {
+//                   method: "POST",
+//                   headers: {
+//                       "X-Requested-With": "XMLHttpRequest",
+//                       "Content-Type": "application/json",
+//                       "X-CSRF-Token": this.getAttribute("data-token")
+//                   },
+//               })
+//               .then(response => {
+//                   if (!response.ok) {
+//                       throw new Error('Network response was not ok');
+//                   }
+//                   return response.json();
+//               })
+//               .then(data => {
+//                   console.log(data);
+//                   if (data.success) {
+//                       // Vérifiez si parentElement existe avant de tenter de le supprimer
+//                       if (this.parentElement) {
+//                           this.parentElement.remove();
+//                       } else {
+//                           console.error('Parent element does not exist.');
+//                       }
+//                   } else {
+//                       alert(data.error);
+//                   }
+//               })
+//               .catch(error => {
+//                   console.error('There was a problem with the fetch operation:', error);
+//               });
+//           }
+//       });
+//   }
+// };
+
+
+
   // Fonction pour faire défiler la page vers le haut
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });

@@ -8,63 +8,52 @@
         <h1 class="text-center">Tricks</h1>
         <br><br>
         <div class="card mb-3">
-            {% if trick.imageUne is empty %}
-                {% if trick.media|length > 0 %}
-                    <img class="card-img-top" src="{{ asset('uploads/brochures/' ~ trick.media[0].image) }}" max-width="350" max-height="350" alt="Card image cap">
-                {% else %}
-                    <img class="card-img-top" src="{{ asset('uploads/brochures/default_image.jpg') }}" max-width="350" max-height="350" alt="Card image cap">
-                {% endif %}
-            {% else %}
-                <img class="card-img-top" src="{{ asset('uploads/brochures/' ~ trick.imageUne) }}" max-width="350" max-height="350" alt="Card image cap">
-            {% endif %}            
-            {% if is_granted('IS_AUTHENTICATED_ANONYMOUSLY') %} 
-            <div class="card-links">
-                <div class="link-box">
-                    <a id="edit-link" href="{{ path('app_tricks_edit', {'id': trick.id}) }}"><img src="/image/update.ico"></a>
-                    <a id="delete-link" href="{{ path('app_tricks_delete', {'id': trick.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ trick.id )}}"><img src="/image/sup1.ico"></a>
+ 
+        {% for media in trick.media %}
+            {% if loop.first %}
+                <img class="card-img-top" src="{{ asset('uploads/brochures/' ~ media.image) }}" max-width="350" max-height="350" alt="Card image cap">
+                {% if is_granted('ROLE_USER') %}
+                <div class="card-links">
+                    <div class="link-box">
+                        <a id="edit-link" href="{{ path('app_media_edit', {'id': media.id}) }}"><img src="/image/update.ico"></a>
+                        <a id="delete-link" href="{{ path('app_media_delete', {'id': media.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ media.id )}}"><img src="/image/sup1.ico"></a>
+                    </div>
                 </div>
-            </div>
-            {% else %}
+                {% endif %}
             {% endif %}
+        {% endfor %}
             <div class="card-img-overlay">
                 <h1 class="card-title text-center" id="titre">{{ trick.nom }}</h1>
             </div>
         </div>
         <div class="content">
             <div class="row">
-                {% for media in trick.media %}
+            {% for media in trick.media %}
                 <div class="col-md">
                     <div class="card">
                         <img src="{{ asset('/uploads/brochures/' ~ media.image) }}" alt="" class="media-item card-img-top taille" >
+                        {% if is_granted('ROLE_USER') %}
                         <div class="card-body">
                             <a  id="add" href="{{ path('app_media_edit', {'id': media.id}) }}"><img src="/image/update.ico"></a>
-                            <a id="add" href="{{ path('app_tricks_delete', {'id': trick.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ trick.id )}}" align="right" no-repeat><img src="/image/sup1.ico"></a>
+                            <a id="add" href="{{ path('app_media_delete', {'id': media.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ media.id )}}" align="right" no-repeat><img src="/image/sup1.ico"></a>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
-                {% endfor %}
+            {% endfor %}
+            {% for video in trick.videos %}  
                 <div class="col-md">
                     <div class="card">
+                        <iframe src="{{ video.video1 }}" class="video-item card-img-top" frameborder="0" allowfullscreen=""></iframe>
+                        {% if is_granted('ROLE_USER') %}
                         <div class="card-body">
-                            <iframe src="{{ trick.video }}" class="video-item card-img-top" frameborder="0" allowfullscreen=""></iframe>
-                            <div class="card-body">
-                                <a  id="add" href="{{ path('app_tricks_editVideo', {'id': trick.id}) }}"><img src="/image/update.ico"></a>
-                                <a id="add" href="{{ path('app_tricks_delete', {'id': trick.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ trick.id )}}" align="right" no-repeat><img src="/image/sup1.ico"></a>
-                            </div>
+                            <a  id="add" href="{{ path('app_video_edit', {'id': video.id}) }}"><img src="/image/update.ico"></a>
+                            <a id="add" href=" {{ path('app_video_delete', {'id': video.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ video.id )}}" align="right" no-repeat><img src="/image/sup1.ico"></a>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
-                <div class="col-md">
-                    <div class="card">
-                        <div class="card-body">
-                            <iframe src="{{ trick.video2 }}" class="video-item card-img-top" frameborder="0" allowfullscreen=""></iframe>
-                            <div class="card-body">
-                                <a  id="add" href="{{ path('app_tricks_editVideo2', {'id': trick.id}) }}"><img src="/image/update.ico"></a>
-                                <a id="add" href="{{ path('app_tricks_delete', {'id': trick.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ trick.id )}}" align="right" no-repeat><img src="/image/sup1.ico"></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            {% endfor %}
             </div>
         </div>
         <button id="voir-plus" class="btn btn-outline-secondary">Voir plus</button>
@@ -81,7 +70,7 @@
                 <p class="card-text"><small class="text-muted">Créer le : {{ trick.ajouter ? trick.ajouter|date('d-m-y H:i:s') : ''}}</small></p>
             </div>
             <div class="col-3 mb-3">
-                <p class="card-text"><small class="text-muted">Modifier...</small></p>
+                <p class="card-text"><small class="text-muted">Modifier le : {{ trick.modifier ? trick.modifier|date('d-m-y H:i:s') : ''}}</small></p>
             </div>
         </div>
         <br>
@@ -96,17 +85,18 @@
         {% for commentaire in trick.commentaires %}
             <div class="row">
                 <div class="col-md-12 box" style="border: 1px solid #000;">
-                    <h6>Ecrit par : le {{commentaire.id}}</h6>
+                    <h6>Ecrit par : {{commentaire.idUser.Nom}} {{commentaire.idUser.Prenom}} - Le : {{ commentaire.date ? commentaire.date|date('d-m-y H:i:s') : ''}}</h6>
                     <p>{{commentaire.commentaire | raw}}</p>
                 </div>
             </div>
             <hr>
         {% endfor %}
-
         <div class="container">
             <a class="btn btn-outline-secondary" id="load-more">Load more</a>
         </div>
         <br>
+        {% if is_granted('ROLE_USER') %}
+
         <div class="container">
             {{ form_start(form) }}
             <div class="commentaire">
@@ -123,5 +113,7 @@
             <br>
             {{ form_end(form) }}
         </div>
+        {% endif %}
+
     </div>
 {% endblock %}

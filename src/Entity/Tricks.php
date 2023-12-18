@@ -32,14 +32,9 @@ class Tricks
     private $nom;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text")
      */
     private $description;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $video;
 
     /**
      * @ORM\ManyToOne(targetEntity=Categorie::class, inversedBy="id_tricks")
@@ -62,16 +57,6 @@ class Tricks
     private $media;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $imageUne;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $video2;
-
-    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $ajouter;
@@ -81,10 +66,16 @@ class Tricks
      */
     private $modifier;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trickVideo")
+     */
+    private $videos;
+
     public function __construct()
     {
         $this->commentaires = new ArrayCollection();
         $this->media = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -112,18 +103,6 @@ class Tricks
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getVideo(): ?string
-    {
-        return $this->video;
-    }
-
-    public function setVideo(?string $video): self
-    {
-        $this->video = $video;
 
         return $this;
     }
@@ -212,32 +191,6 @@ class Tricks
         return $this;
     }
 
-
-
-    public function getImageUne(): ?string
-    {
-        return $this->imageUne;
-    }
-
-    public function setImageUne(?string $imageUne): self
-    {
-        $this->imageUne = $imageUne;
-
-        return $this;
-    }
-
-    public function getVideo2(): ?string
-    {
-        return $this->video2;
-    }
-
-    public function setVideo2(?string $video2): self
-    {
-        $this->video2 = $video2;
-
-        return $this;
-    }
-
     public function getAjouter(): ?\DateTimeInterface
     {
         return $this->ajouter;
@@ -258,6 +211,36 @@ class Tricks
     public function setModifier(?\DateTimeInterface $modifier): self
     {
         $this->modifier = $modifier;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Video>
+     */
+    public function getVideos(): Collection
+    {
+        return $this->videos;
+    }
+
+    public function addVideo(Video $video): self
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->setTrickVideo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video): self
+    {
+        if ($this->videos->removeElement($video)) {
+            // set the owning side to null (unless already changed)
+            if ($video->getTrickVideo() === $this) {
+                $video->setTrickVideo(null);
+            }
+        }
 
         return $this;
     }

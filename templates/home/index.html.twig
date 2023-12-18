@@ -37,14 +37,20 @@
                     <div class="box col-lg-3">
 
                         <div class="card-header">  
-                            <img class="card-img-top" src="{{ asset('uploads/brochures/' ~ trick.imageUne) }}" alt="Card image cap"> 
+                        {% for media in trick.media %}
+                            {% if loop.first %}
+                                <img class="card-img-top" src="{{ asset('uploads/brochures/' ~ media.image) }}" alt="Card image cap">
+                            {% endif %}
+                        {% endfor %}
                         </div>
                         <div class="card-container">
                             <h3>{{ trick.nom }}
+                            {% if is_granted('ROLE_USER') %}
                                 <a href="{{ path('app_tricks_edit', {'id': trick.id}) }}"><img src="/image/update.ico"></a>
-                                <a href="{{ path('app_tricks_delete', {'id': trick.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ trick.id )}}">
-                                    <img src="/image/sup1.ico">
-                                </a>
+                                {# <a href="{{ path('app_tricks_delete', {'id': trick.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ trick.id )}}"><img src="/image/sup1.ico"></a> #}
+                                    {{ include('tricks/_delete_form.html.twig') }}
+
+                            {% endif %}
                             </h3>
                             <a class="text-decoration-none" href="{{ path('app_tricks_show', {'id': trick.id}) }}">
                                 Voir plus
