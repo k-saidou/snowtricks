@@ -26,8 +26,7 @@
                     <div class="col-lg-6 mb-5 mb-lg-0">
                         <div class="card">
                             <div class="card-body py-5 px-md-5">
-                                <form>
-                                    {{ form_start(registrationForm) }}
+                                {{ form_start(registrationForm) }}
                                     <!-- 2 column grid layout with text inputs for the first and last names -->
                                     <div class="row">
                                     <div class="col-md-6 mb-4">
@@ -63,9 +62,8 @@
                                         {{ form_row(registrationForm.agreeTerms) }}
                                     </div>
                                     <!-- Submit button -->
-                                    <button type="submit" class="btn btn-primary btn-block mb-4">Inscription</button>
-                                    {{ form_end(registrationForm) }}
-                                </form>
+                                    <button type="submit" class="btn btn-primary mb-4">Inscription</button>
+                                {{ form_end(registrationForm) }}
                             </div>
                         </div>
                     </div>

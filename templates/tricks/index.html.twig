@@ -3,46 +3,48 @@
 {% block title %}Tricks index{% endblock %}
 
 {% block body %}
+
+<section class="py-5 border-bottom" id="features" data-tricks="">
     <div class="container">
-            <br><br>
-        <h1 class="text-center">Tricks index</h1>
-            <br><br>
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Nom</th>
-                    <th>Description</th>
-                    <th>ImageUne</th>
-                    <th>Video</th>
-                    <th>actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for trick in tricks %}
-                <tr>
-                    <td>{{ trick.id }}</td>
-                    <td>{{ trick.nom }}</td>
-                    <td>{{ trick.description }}</td>
-                    <td>{{ trick.imageUne }}
-                <img src="{{ asset('/uploads/brochures/' ~trick.imageUne) }}" alt="" width="150">
-                    </td>
-                    <td>{{ trick.video }}</td>
-                    <td>
-                        <a class="btn btn-outline-primary" href="{{ path('app_tricks_show', {'id': trick.id}) }}">Voir</a>
-                        <a class="btn btn-outline-secondary" href="{{ path('app_tricks_edit', {'id': trick.id}) }}">Modifier</a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="7">no records found</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <div class="d-grid gap-2 col-6 mx-auto">
+            <div class="d-grid gap-2 col-6 mx-auto">
             <a class="btn btn-outline-primary" href="{{ path('app_tricks_new') }}">Créer un tricks</a>
         </div>
         <br><br>
+        <div class="row">
+            <div class="card">
+                <h1 class="heading mb-3">Tous les tricks <i class="bi bi-arrow-down"></i></h1>
+                <div class="card-container mb-3 row">
+                    {% for trick in tricks %}
+                        <div class="card col-lg-3">
+                            <div class="card-header">  
+                                {% for media in trick.media %}
+                                    {% if loop.first %}
+                                        <img class="card-img-top" src="{{ asset('uploads/brochures/' ~ media.image) }}" alt="Card image cap">
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <div class="card-container">
+                                <h3>{{ trick.nom }}
+                                    {% if is_granted('ROLE_USER') %}
+                                        <a href="{{ path('app_tricks_edit', {'id': trick.id}) }}"><img src="/image/update.ico"></a>
+                                        {{ include('tricks/_delete_form.html.twig') }}
+                                    {% endif %}
+                                </h3>
+                                <a class="text-decoration-none" href="{{ path('app_tricks_show', {'id': trick.id}) }}">
+                                    Voir plus
+                                    <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>     
+            </div>
+        </div>
     </div>
+    <div class="d-grid gap-2 col-6 mx-auto">
+        <a class="btn btn-outline-primary" href="{{ path('app_tricks_new') }}">Créer un tricks</a>
+    </div>
+    <br><br>
+</section>
+
 {% endblock %}

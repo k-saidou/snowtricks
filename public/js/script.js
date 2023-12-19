@@ -25,36 +25,7 @@ loadMoreBtn.onclick = () =>{
       loadMoreBtn.style.display = 'none';
    }
 } 
-/*
-window.onload = () => {
-   let links = document.querySelectorAll("[data-delete]")
-   
-   for(link of links){
-       link.addEventListener("click", function(e){
-           e.preventDefault()
-console.log(this.getAttribute("data-token"))
 
-           if(confirm("Voulez-vous supprimer cette image ?")){
-               fetch(this.getAttribute("href"), {
-                method: "POST",
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest",
-                    "Content-Type": "application/json",
-                    "X-CSRF-Token": this.getAttribute("data-token") 
-                },
-            }).then(                   
-                  response => response.json()
-               ).then(data => {
-                   if(data.success)
-                       this.parentElement.remove()
-                   else
-                       alert(data.error)
-               }).catch(e => alert(e))
-           }
-       })
-   }
-}
-*/
   // Fonction pour faire défiler la page vers le haut
   function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -99,3 +70,22 @@ function openModal() {
 function closeModal() {
   $('#myModal').modal('hide'); // Utilisez l'ID de votre fenêtre modale
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+  // Masquer tous les commentaires avec un index supérieur à 4
+  var commentaires = document.querySelectorAll(".commentaire");
+  for (var i = 5; i < commentaires.length; i++) {
+      commentaires[i].style.display = "none";
+  }
+
+  // Ajouter un gestionnaire d'événements pour le bouton "Load more"
+  document.getElementById("load-more").addEventListener("click", function() {
+      // Afficher les commentaires suivants
+      for (var i = 5; i < commentaires.length; i++) {
+          commentaires[i].style.display = "block";
+      }
+
+      // Masquer le bouton une fois que tous les commentaires sont affichés
+      this.style.display = "none";
+  });
+});
