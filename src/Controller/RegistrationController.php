@@ -63,6 +63,7 @@ class RegistrationController extends AbstractController
                 $request
             );
         }
+        $this->addFlash('success', 'Un mail vous a été envoyez, veuillez confirmer votre adresse Email.');
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),

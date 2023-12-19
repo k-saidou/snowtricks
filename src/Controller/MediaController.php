@@ -119,7 +119,7 @@ class MediaController extends AbstractController
             }
             $mediaRepository->add($media, true);
 
-            return $this->redirectToRoute('app_media_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_tricks_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('media/edit.html.twig', [
@@ -137,6 +137,6 @@ class MediaController extends AbstractController
             $mediaRepository->remove($media, true);
        }
 
-        return $this->redirectToRoute('app_media_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_tricks_index', [], Response::HTTP_SEE_OTHER);
     }
 } 

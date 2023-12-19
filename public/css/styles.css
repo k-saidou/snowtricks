@@ -209,3 +209,8 @@ header.masthead {
       display: block; /* Affiche le contenu sur les écrans plus larges */
   }
 }
+.card-container h3 a,
+.card-container h3 form {
+    display: inline-block;
+    margin-right: 10px; /* Ajustez la marge selon vos besoins */
+}
