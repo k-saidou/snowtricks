@@ -25,9 +25,13 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href= "{{ path('app_user_index')}}">User</a></li>
                         <li class="nav-item"><a class="nav-link" href= "{{ path('app_tricks_index')}}">Tricks</a></li>
+                        {% if is_granted('ROLE_ADMIN') %}
+
+                        <li class="nav-item"><a class="nav-link" href= "{{ path('app_user_index')}}">User</a></li>
                         <li class="nav-item"><a class="nav-link" href= "{{ path('app_categorie_index')}}">Categorie</a></li>
+                        {% endif %}
+
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %} 
                         <li class="nav-item"><a class="nav-link" href= "{{ path('app_logout')}}">Déconnexion</a></li>
                          {% else %}
@@ -41,19 +45,23 @@
 
         {% block body %}{% endblock %}
         <div id="footer-mobile">
-        <div class="row justify-content-center">
-            <div class="col-3">
-                <a href="/"><img src="/image/page-daccueil.png"></a>
+            <div class="row justify-content-center">
+                <div class="col-3">
+                    <a href="/"><img src="/image/home.ico"></a>
+                </div>
+                <div class="col-3">
+                    <a href="{{ path('app_tricks_index')}}"><img src="/image/pexels.ico"></a>
+                </div>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %} 
+                <div class="col-3">
+                    <a class="nav-link" href= "{{ path('app_logout')}}"><img src="/image/connexion.ico"></a>
+                </div>
+                {% else %}
+                <div class="col-3">
+                    <a class="nav-link" href= "{{ path('app_login')}}"><img src="/image/se-deconnecter.ico"></a>
+                </div>
+                {% endif %}
             </div>
-            <div class="col-3">
-                <a href="/"><img src="/image/connexion.png"></a>
-            </div>
-            <div class="col-3">
-                <a href="/"><img src="/image/deconnexion.png"></a>
-            </div>
-        </div>
-                                         
-           
         </div>
         <!-- Footer-->
         <footer class="py-5 bg-ligth">

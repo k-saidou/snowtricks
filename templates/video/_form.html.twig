@@ -1,0 +1,9 @@
+{{ form_start(form) }}
+    <div>
+        {{ form_row(form.video1, {
+            'attr':{'class':'form-control'}
+        }) }}
+    </div>  
+    <br><br> 
+    <button class="btn btn-outline-success">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

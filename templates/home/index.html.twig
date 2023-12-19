@@ -22,10 +22,6 @@
     </div>
 </header>
 
-{% for message in app.flashes('success') %}
-    <div class="alert alert-success" role="alert">{{ message }}</div>
-{% endfor %}
-
 <!-- Features section-->
 <section class="py-5 border-bottom" id="features" data-tricks="">
     <div class="container">
@@ -37,14 +33,21 @@
                     <div class="box col-lg-3">
 
                         <div class="card-header">  
-                            <img class="card-img-top" src="{{ asset('uploads/brochures/' ~ trick.imageUne) }}" alt="Card image cap"> 
+                        {% for media in trick.media %}
+                            {% if loop.first %}
+                                <img class="card-img-top" src="{{ asset('uploads/brochures/' ~ media.image) }}" alt="Card image cap">
+                            {% endif %}
+                        {% endfor %}
                         </div>
                         <div class="card-container">
                             <h3>{{ trick.nom }}
+                            {% if is_granted('ROLE_USER') %}
                                 <a href="{{ path('app_tricks_edit', {'id': trick.id}) }}"><img src="/image/update.ico"></a>
-                                <a href="{{ path('app_tricks_delete', {'id': trick.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ trick.id )}}">
-                                    <img src="/image/sup1.ico">
-                                </a>
+                                <form method="post" action="{{ path('app_tricks_delete', {'id': trick.id}) }}" onsubmit="return confirm('Voulez-vous supprimer ce trick ?');">
+                                    <input type="hidden" name="_token" value="{{ ('delete' ~ trick.id) }}">
+                                    <button class="btn" type="submit"><img src="/image/sup1.ico"></button>
+                                </form>
+                            {% endif %}
                             </h3>
                             <a class="text-decoration-none" href="{{ path('app_tricks_show', {'id': trick.id}) }}">
                                 Voir plus
