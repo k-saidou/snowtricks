@@ -69,35 +69,30 @@
             <div class="col-3 mb-3">
                 <p class="card-text"><small class="text-muted">Créer le : {{ trick.ajouter ? trick.ajouter|date('d-m-y H:i:s') : ''}}</small></p>
             </div>
-            {% if trick.modifier %}
             <div class="col-3 mb-3">
                 <p class="card-text"><small class="text-muted">Modifier le : {{ trick.modifier ? trick.modifier|date('d-m-y H:i:s') : ''}}</small></p>
             </div>
-            {% endif %} 
         </div>
         <br>
         <hr>
         <br>
-        <div class="container" id="commentaires-container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>{{ trick.commentaires | length }} Commentaires :</h1>
+            </div>
+        </div>
+        <br>
+        {% for commentaire in trick.commentaires %}
             <div class="row">
-                <div class="col-md-12">
-                    <h1>{{ trick.commentaires | length }} Commentaires :</h1>
+                <div class="col-md-12 box" style="border: 1px solid #000;">
+                    <h6>Ecrit par : {{commentaire.idUser.Nom}} {{commentaire.idUser.Prenom}} - Le : {{ commentaire.date ? commentaire.date|date('d-m-y H:i:s') : ''}}</h6>
+                    <p>{{commentaire.commentaire | raw}}</p>
                 </div>
             </div>
-            <br>
-            {% for commentaire in trick.commentaires %}
-                <!-- Ajoutez l'attribut data-index et la classe "commentaire" -->
-                <div class="row commentaire" data-index="{{ loop.index }}">
-                    <div class="col-md-12 box" style="border: 1px solid #000;">
-                        <h6>Ecrit par : {{commentaire.idUser.Nom}} {{commentaire.idUser.Prenom}} - Le : {{ commentaire.date ? commentaire.date|date('d-m-y H:i:s') : ''}}</h6>
-                        <p>{{commentaire.commentaire | raw}}</p>
-                    </div>
-                </div>
-                <hr>
-            {% endfor %}
-            <div class="container">
-                <a class="btn btn-outline-secondary" id="load-more">Load more</a>
-            </div>
+            <hr>
+        {% endfor %}
+        <div class="container">
+            <a class="btn btn-outline-secondary" id="load-more">Load more</a>
         </div>
         <br>
         {% if is_granted('ROLE_USER') %}
@@ -119,5 +114,6 @@
             {{ form_end(form) }}
         </div>
         {% endif %}
+
     </div>
 {% endblock %}

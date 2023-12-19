@@ -67,7 +67,7 @@ class VideoController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $videoRepository->add($video, true);
 
-            return $this->redirectToRoute('app_tricks_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_video_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('video/edit.html.twig', [
@@ -77,7 +77,7 @@ class VideoController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_video_delete", methods={"POST"})
+     * @Route("/{id}", name="app_video_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Video $video, VideoRepository $videoRepository): Response
     {
@@ -85,6 +85,6 @@ class VideoController extends AbstractController
             $videoRepository->remove($video, true);
         }
 
-        return $this->redirectToRoute('app_tricks_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_video_index', [], Response::HTTP_SEE_OTHER);
     }
 }

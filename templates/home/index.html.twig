@@ -22,6 +22,10 @@
     </div>
 </header>
 
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success" role="alert">{{ message }}</div>
+{% endfor %}
+
 <!-- Features section-->
 <section class="py-5 border-bottom" id="features" data-tricks="">
     <div class="container">
@@ -43,10 +47,9 @@
                             <h3>{{ trick.nom }}
                             {% if is_granted('ROLE_USER') %}
                                 <a href="{{ path('app_tricks_edit', {'id': trick.id}) }}"><img src="/image/update.ico"></a>
-                                <form method="post" action="{{ path('app_tricks_delete', {'id': trick.id}) }}" onsubmit="return confirm('Voulez-vous supprimer ce trick ?');">
-                                    <input type="hidden" name="_token" value="{{ ('delete' ~ trick.id) }}">
-                                    <button class="btn" type="submit"><img src="/image/sup1.ico"></button>
-                                </form>
+                                {# <a href="{{ path('app_tricks_delete', {'id': trick.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ trick.id )}}"><img src="/image/sup1.ico"></a> #}
+                                    {{ include('tricks/_delete_form.html.twig') }}
+
                             {% endif %}
                             </h3>
                             <a class="text-decoration-none" href="{{ path('app_tricks_show', {'id': trick.id}) }}">
