@@ -6,9 +6,11 @@
 
 <section class="py-5 border-bottom" id="features" data-tricks="">
     <div class="container">
-            <div class="d-grid gap-2 col-6 mx-auto">
+        {% if is_granted('ROLE_USER') %}
+        <div class="d-grid gap-2 col-6 mx-auto">
             <a class="btn btn-outline-primary" href="{{ path('app_tricks_new') }}">Créer un tricks</a>
         </div>
+        {% endif %}
         <br><br>
         <div class="row">
             <div class="card">
@@ -41,9 +43,11 @@
             </div>
         </div>
     </div>
+    {% if is_granted('ROLE_USER') %}
     <div class="d-grid gap-2 col-6 mx-auto">
         <a class="btn btn-outline-primary" href="{{ path('app_tricks_new') }}">Créer un tricks</a>
     </div>
+    {% endif %}
     <br><br>
 </section>
 
