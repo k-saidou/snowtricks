@@ -1,12 +1,4 @@
 # routes.yaml
-app_trick_edit_video:
-    path: '/tricks/{id}/edit-video'
-    controller: 'App\Controller\TrickController::editVideo'
-app_trick_delete_video:
-    path: '/tricks/{id}/delete-video'
-    controller: 'App\Controller\TrickController::deleteVideo'
-
-    # routes.yaml
-app_tricks_edit_video_form:
-    path: '/tricks/{id}/edit-video-form'
-    controller: 'App\Controller\TrickController::editVideoForm'
+app_tricks_show:
+    path: '/tricks/{slug}'
+    controller: 'App\Controller\TricksController::show'

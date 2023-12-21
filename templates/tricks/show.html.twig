@@ -35,7 +35,11 @@
                         {% if is_granted('ROLE_USER') %}
                         <div class="card-body">
                             <a  id="add" href="{{ path('app_media_edit', {'id': media.id}) }}"><img src="/image/update.ico"></a>
-                            <a id="add" href="{{ path('app_media_delete', {'id': media.id}) }}" data-delete data-token="{{ csrf_token('delete' ~ media.id )}}" align="right" no-repeat><img src="/image/sup1.ico"></a>
+                            <form method="post" action="{{ path('app_media_delete', {'id': media.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ media.id) }}">
+                                <button class="btn"><img src="/image/sup1.ico"></button>
+                            </form>
                         </div>
                         {% endif %}
                     </div>
@@ -69,34 +73,38 @@
             <div class="col-3 mb-3">
                 <p class="card-text"><small class="text-muted">Créer le : {{ trick.ajouter ? trick.ajouter|date('d-m-y H:i:s') : ''}}</small></p>
             </div>
+            {% if trick.modifier %}
             <div class="col-3 mb-3">
                 <p class="card-text"><small class="text-muted">Modifier le : {{ trick.modifier ? trick.modifier|date('d-m-y H:i:s') : ''}}</small></p>
             </div>
+            {% endif %} 
         </div>
         <br>
         <hr>
         <br>
-        <div class="row">
-            <div class="col-md-12">
-                <h1>{{ trick.commentaires | length }} Commentaires :</h1>
-            </div>
-        </div>
-        <br>
-        {% for commentaire in trick.commentaires %}
+        <div class="container" id="commentaires-container">
             <div class="row">
-                <div class="col-md-12 box" style="border: 1px solid #000;">
-                    <h6>Ecrit par : {{commentaire.idUser.Nom}} {{commentaire.idUser.Prenom}} - Le : {{ commentaire.date ? commentaire.date|date('d-m-y H:i:s') : ''}}</h6>
-                    <p>{{commentaire.commentaire | raw}}</p>
+                <div class="col-md-12">
+                    <h1>{{ trick.commentaires | length }} Commentaires :</h1>
                 </div>
             </div>
-            <hr>
-        {% endfor %}
-        <div class="container">
-            <a class="btn btn-outline-secondary" id="load-more">Load more</a>
+            <br>
+            {% for commentaire in trick.commentaires %}
+                <!-- Ajoutez l'attribut data-index et la classe "commentaire" -->
+                <div class="row commentaire" data-index="{{ loop.index }}">
+                    <div class="col-md-12 box" style="border: 1px solid #000;">
+                        <h6>Ecrit par : {{commentaire.idUser.Nom}} {{commentaire.idUser.Prenom}} - Le : {{ commentaire.date ? commentaire.date|date('d-m-y H:i:s') : ''}}</h6>
+                        <p>{{commentaire.commentaire | raw}}</p>
+                    </div>
+                </div>
+                <hr>
+            {% endfor %}
+            <div class="container">
+                <a class="btn btn-outline-secondary" id="load-more">Load more</a>
+            </div>
         </div>
         <br>
         {% if is_granted('ROLE_USER') %}
-
         <div class="container">
             {{ form_start(form) }}
             <div class="commentaire">
@@ -114,6 +122,5 @@
             {{ form_end(form) }}
         </div>
         {% endif %}
-
     </div>
 {% endblock %}

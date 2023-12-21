@@ -44,14 +44,15 @@ class TricksController extends AbstractController
     {
         $trick = new Tricks();
         $trick->setAjouter(new \DateTime());
-        $form = $this->createForm(TricksType::class, $trick);
+        $form = $this->createForm(TricksType::class, $trick, ['slugger' => $slugger]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
 
             $images = $form->get('image')->getData();
             $video1 = $form->get('video1')->getData();
             $video2 = $form->get('video2')->getData();
+            $trick->setSlug((string) $slugger->slug($trick->getNom())->lower());
 
             if ($video1)
             {
@@ -119,12 +120,13 @@ class TricksController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_tricks_show", methods={"GET", "POST"})
+     * @Route("/tricks/{slug}", name="app_tricks_show", methods={"GET", "POST"})
      */
-    public function show(Request $request, Tricks $trick, CommentaireRepository $commentaireRepository): Response
+    public function show(Request $request, Tricks $trick, TricksRepository $tricksRepository, CommentaireRepository $commentaireRepository, string $slug): Response
     {
 
         $user = $this->getUser();
+        $trick = $tricksRepository->findOneBy(['slug' => $slug]);
 
         $commentaire = new Commentaire();
         $commentaire->setDate(new \DateTime('now'));
@@ -137,7 +139,8 @@ class TricksController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $commentaireRepository->add($commentaire, true);
 
-            return $this->redirectToRoute('app_tricks_show', ["id" =>$trick->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_tricks_show', ["slug" => $trick->getSlug()], Response::HTTP_SEE_OTHER);
+
         }
 
         return $this->render('tricks/show.html.twig', [
@@ -148,52 +151,24 @@ class TricksController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="app_tricks_edit", methods={"GET", "POST"})
+     * @Route("/{slug}/edit", name="app_tricks_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Tricks $trick, TricksRepository $tricksRepository, MediaRepository $mediaRepository, VideoRepository $videoRepository, SluggerInterface $slugger): Response
     {
 
-        $trick->setModifier(new \DateTime('now'));
+        $trick->setModifier(new \DateTime());
 
         $form = $this->createForm(TricksType::class, $trick);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-
+        if ($form->isSubmitted()) {
+            $trick->setSlug($slugger->slug($trick->getNom())->lower());
             $trick->setDescription($form->get('description')->getData());
             $trick->setCategorie($form->get('categorie')->getData());
+            $trick->setNom($form->get('nom')->getData());
 
-            $images = $form->get('image')->getData();
+            $tricksRepository->add($trick, true);
 
-            if ($images) {
-                foreach ($images as $image)
-                {
-                    $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-                    // this is needed to safely include the file name as part of the URL
-                    $safeFilename = $slugger->slug($originalFilename);
-                    $newFilename = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
-
-                    // Move the file to the directory where brochures are stored
-                    try {
-                        $image->move(
-                            $this->getParameter('brochures_directory'),
-                            $newFilename
-                        );
-                        $media = new Media;
-                        $media->setTricks($trick);
-
-                        // updates the 'imagename' property to store the PDF file name
-                        // instead of its contents
-                        $media->setImage($newFilename);
-                        $mediaRepository->add($media, true);
-        
-                    } catch (FileException $e) {
-                        // ... handle exception if something happens during file upload
-                    }
-                }
-
-            }
-            
             return $this->redirectToRoute('app_tricks_index', [], Response::HTTP_SEE_OTHER);
         }
         
@@ -209,9 +184,7 @@ class TricksController extends AbstractController
      */   
     public function delete(Request $request, Tricks $trick, TricksRepository $tricksRepository): Response
     {
-        // if ($this->isCsrfTokenValid('delete'.$trick->getId(), $request->request->get('_token'))) {
             $tricksRepository->remove($trick, true);
-        // }
 
         return $this->redirectToRoute('app_tricks_index', [], Response::HTTP_SEE_OTHER);
     }
