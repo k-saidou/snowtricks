@@ -199,14 +199,14 @@ header.masthead {
   }
 }
 
-.content {
-  display: none; /* Masque le contenu par défaut */
+#voir-plus {
+  display: block; /* Masque le contenu par défaut */
 }
 
 @media (min-width: 768px) {
   /* Styles pour les écrans plus larges (non mobiles) */
-  .content {
-      display: block; /* Affiche le contenu sur les écrans plus larges */
+  #voir-plus {
+      display: none; /* Affiche le contenu sur les écrans plus larges */
   }
 }
 .card-container h3 a,

@@ -15,6 +15,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
 
 class TricksType extends AbstractType
 {
@@ -55,12 +57,29 @@ class TricksType extends AbstractType
             ->add('categorie', EntityType::class, [
                 'class' => Categorie::class])
         ;
+
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) use ($options) {
+            $form = $event->getForm();
+            $data = $event->getData();
+
+            // Si le nom existe dans les données, générez le slug
+            if (isset($data['nom'])) {
+                $slugger = $options['slugger'];
+                $slug = $slugger->slug($data['nom'])->lower();
+
+                // Ajoutez le slug aux données du formulaire
+                $data['slug'] = $slug;
+                $event->setData($data);
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Tricks::class,
+            'slugger' => null, // Ajoutez cette ligne
+
         ]);
     }
 }

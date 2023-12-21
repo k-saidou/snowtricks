@@ -3,7 +3,7 @@
 {% block title %}Tricks{% endblock %}
 
 {% block body %}
-<form method="POST" action="{{ path('app_tricks_edit', {'id': trick.id}) }}">
+<form method="POST" action="{{ path('app_tricks_edit', {'slug': trick.getSlug}) }}">
 
     <div class="container">
         <br>
@@ -96,7 +96,7 @@
                 </form>
             </div>
             <div class="col-sm-1 mb-3">
-                <button class="btn btn-outline-success" type="submit" href="{{ path('app_tricks_edit', {'id': trick.id}) }}">{{ button_label|default('Enregistrer') }}</button>
+                <button class="btn btn-outline-success" type="submit" href="{{ path('app_tricks_edit', {'slug': trick.getSlug}) }}">{{ button_label|default('Enregistrer') }}</button>
             </div>
         </div>
         <br>
